@@ -32,8 +32,8 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             set -ex
-            export JAVA_TOOL_OPTIONS="-Xmx2048m"
-            ./gradlew help
+            export JAVA_OPTS="-Xmx2048m"
+            ./gradlew --no-daemon help
     - android-unit-test@1:
         inputs:
         - project_location: $BITRISE_SOURCE_DIR
@@ -75,4 +75,4 @@ app:
   envs:
   - opts:
       is_expand: false
-    GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"
+    GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m"
