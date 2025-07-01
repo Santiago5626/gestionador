@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/clientesFragment"
+        android:icon="@drawable/ic_people"
+        android:title="@string/nav_clientes" />
+
+    <item
+        android:id="@+id/prestamosFragment"
+        android:icon="@drawable/ic_money"
+        android:title="@string/nav_prestamos" />
+
+    <item
+        android:id="@+id/activosFragment"
+        android:icon="@drawable/ic_assets"
+        android:title="@string/nav_activos" />
+</menu>

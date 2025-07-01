@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "377870600622",
+    "project_id": "gestion-d6d79",
+    "storage_bucket": "gestion-d6d79.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377870600622:android:ecf7c9fc50180aa8fe203f",
+        "android_client_info": {
+          "package_name": "com.company.gestion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAOJNR2NQhRkXSn_WfZ4mHAfmriWmyD6M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

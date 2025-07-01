@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/clientesFragment">
+
+    <!-- Clientes Navigation -->
+    <fragment
+        android:id="@+id/clientesFragment"
+        android:name="com.company.gestion.ui.client.ClientesFragment"
+        android:label="@string/nav_clientes"
+        tools:layout="@layout/fragment_clientes">
+        <action
+            android:id="@+id/action_clientesFragment_to_addClienteFragment"
+            app:destination="@id/addClienteFragment" />
+        <action
+            android:id="@+id/action_clientesFragment_to_clienteDetailFragment"
+            app:destination="@id/clienteDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addClienteFragment"
+        android:name="com.company.gestion.ui.client.AddClienteFragment"
+        android:label="@string/add_cliente"
+        tools:layout="@layout/fragment_add_cliente" />
+
+    <fragment
+        android:id="@+id/clienteDetailFragment"
+        android:name="com.company.gestion.ui.client.ClienteDetailFragment"
+        android:label="Detalles del Cliente"
+        tools:layout="@layout/fragment_cliente_detail">
+        <argument
+            android:name="clienteId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_clienteDetailFragment_to_addPrestamoFragment"
+            app:destination="@id/addPrestamoFragment" />
+        <action
+            android:id="@+id/action_clienteDetailFragment_to_prestamoDetailFragment"
+            app:destination="@id/prestamoDetailFragment" />
+    </fragment>
+
+    <!-- Prestamos Navigation -->
+    <fragment
+        android:id="@+id/prestamosFragment"
+        android:name="com.company.gestion.ui.loan.PrestamosFragment"
+        android:label="@string/nav_prestamos"
+        tools:layout="@layout/fragment_prestamos">
+        <action
+            android:id="@+id/action_prestamosFragment_to_addPrestamoFragment"
+            app:destination="@id/addPrestamoFragment" />
+        <action
+            android:id="@+id/action_prestamosFragment_to_prestamoDetailFragment"
+            app:destination="@id/prestamoDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addPrestamoFragment"
+        android:name="com.company.gestion.ui.loan.AddPrestamoFragment"
+        android:label="@string/add_prestamo"
+        tools:layout="@layout/fragment_add_prestamo">
+        <argument
+            android:name="clienteId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/prestamoDetailFragment"
+        android:name="com.company.gestion.ui.loan.PrestamoDetailFragment"
+        android:label="Detalles del Préstamo"
+        tools:layout="@layout/fragment_prestamo_detail">
+        <argument
+            android:name="prestamoId"
+            app:argType="string" />
+    </fragment>
+
+    <!-- Activos Navigation -->
+    <fragment
+        android:id="@+id/activosFragment"
+        android:name="com.company.gestion.ui.asset.ActivosFragment"
+        android:label="@string/nav_activos"
+        tools:layout="@layout/fragment_activos">
+        <action
+            android:id="@+id/action_activosFragment_to_addActivoFragment"
+            app:destination="@id/addActivoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addActivoFragment"
+        android:name="com.company.gestion.ui.asset.AddActivoFragment"
+        android:label="@string/add_activo"
+        tools:layout="@layout/fragment_add_activo" />
+
+</navigation>

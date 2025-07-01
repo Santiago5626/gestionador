@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">Gestion</string>
+    
+    <!-- Navigation -->
+    <string name="nav_clientes">Clientes</string>
+    <string name="nav_prestamos">Préstamos</string>
+    <string name="nav_activos">Activos</string>
+    
+    <!-- Common -->
+    <string name="add">Agregar</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete">Eliminar</string>
+    <string name="edit">Editar</string>
+    <string name="loading">Cargando...</string>
+    <string name="error">Error</string>
+    <string name="success">Éxito</string>
+    
+    <!-- Client related -->
+    <string name="cliente_nombre">Nombre</string>
+    <string name="cliente_cedula">Cédula</string>
+    <string name="cliente_telefono">Teléfono</string>
+    <string name="cliente_direccion">Dirección</string>
+    <string name="add_cliente">Agregar Cliente</string>
+    <string name="cliente_created">Cliente creado exitosamente</string>
+    <string name="no_clientes">No hay clientes registrados</string>
+    
+    <!-- Loan related -->
+    <string name="prestamo_tipo">Tipo de Préstamo</string>
+    <string name="prestamo_monto">Monto</string>
+    <string name="prestamo_cuota">Cuota</string>
+    <string name="prestamo_saldo">Saldo</string>
+    <string name="prestamo_fecha">Fecha</string>
+    <string name="prestamo_estado">Estado</string>
+    <string name="add_prestamo">Agregar Préstamo</string>
+    <string name="no_prestamos">No hay préstamos registrados</string>
+    
+    <!-- Asset related -->
+    <string name="activo_monto">Monto</string>
+    <string name="activo_descripcion">Descripción</string>
+    <string name="activo_categoria">Categoría</string>
+    <string name="activo_fecha">Fecha</string>
+    <string name="add_activo">Agregar Activo</string>
+    <string name="activo_created">Activo guardado exitosamente</string>
+    <string name="no_activos">No hay activos registrados</string>
+    <string name="balance_total">Balance Total</string>
+    
+    <!-- Validation messages -->
+    <string name="field_required">Este campo es requerido</string>
+    <string name="invalid_email">Email inválido</string>
+    <string name="invalid_phone">Teléfono inválido</string>
+    <string name="invalid_amount">Monto inválido</string>
+    
+    <!-- Error messages -->
+    <string name="error_network">Error de conexión</string>
+    <string name="error_unknown">Error desconocido</string>
+    <string name="error_firebase">Error en Firebase</string>
+</resources>
