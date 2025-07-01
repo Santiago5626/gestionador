@@ -33,7 +33,7 @@ workflows:
             #!/usr/bin/env bash
             set -ex
             export JAVA_OPTS="-Xmx2048m"
-            ./gradlew help --no-daemon
+            ./gradlew tasks
     - android-unit-test@1:
         inputs:
         - project_location: $BITRISE_SOURCE_DIR
