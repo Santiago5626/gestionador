@@ -4,7 +4,7 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: android
 
 workflows:
-  primary:
+  run_tests:
     description: |
       The workflow executes the tests. The workflow will fail if the tests fail.
     steps:
