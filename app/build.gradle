@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace 'com.company.gestion'
+    namespace 'com.gestionador'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.company.gestion"
+        applicationId "com.gestionador"
         minSdk 26
         targetSdk 34
         versionCode 1
