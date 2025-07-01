@@ -68,7 +68,7 @@ workflows:
         - content: |
             #!/usr/bin/env bash
             set -ex
-            ./gradlew assembleDebug
+            ./gradlew app:assembleDebug
     - save-gradle-cache@1: {}
     - deploy-to-bitrise-io@2: {}
 
