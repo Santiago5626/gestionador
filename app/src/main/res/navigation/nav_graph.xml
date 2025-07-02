@@ -104,4 +104,13 @@
         android:label="@string/add_activo"
         tools:layout="@layout/fragment_add_activo" />
 
+    <fragment
+        android:id="@+id/prestamoCartonFragment"
+        android:name="com.gestionador.ui.loan.PrestamoCartonFragment"
+        android:label="Cartón del Préstamo"
+        tools:layout="@layout/fragment_prestamo_carton">
+        <argument
+            android:name="prestamoId"
+            app:argType="string" />
+    </fragment>
 </navigation>
