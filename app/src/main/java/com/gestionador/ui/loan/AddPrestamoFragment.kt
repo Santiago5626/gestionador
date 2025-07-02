@@ -128,15 +128,15 @@ class AddPrestamoFragment : Fragment() {
                 // Para préstamos mensuales: mostrar porcentaje de interés, ocultar valor de cuota
                 binding.tilPorcentajeInteres.visibility = View.VISIBLE
                 binding.tilValorCuota.visibility = View.GONE
-                binding.tilPorcentajeInteres.hint = getString(R.string.porcentaje_interes)
-                binding.tilMontoTotal.hint = getString(R.string.monto_a_prestar)
+                binding.tilPorcentajeInteres.hint = "Porcentaje de interés mensual (%)"
+                binding.tilMontoTotal.hint = "Monto a prestar"
             }
             else -> {
                 // Para préstamos diarios y semanales: mostrar valor a devolver, ocultar porcentaje
                 binding.tilPorcentajeInteres.visibility = View.GONE
                 binding.tilValorCuota.visibility = View.VISIBLE
-                binding.tilValorCuota.hint = getString(R.string.valor_a_devolver)
-                binding.tilMontoTotal.hint = getString(R.string.monto_a_prestar)
+                binding.tilValorCuota.hint = "Valor a devolver"
+                binding.tilMontoTotal.hint = "Monto a prestar"
             }
         }
     }
