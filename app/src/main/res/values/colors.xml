@@ -30,4 +30,9 @@
     
     <!-- Surface Colors -->
     <color name="surfaceColor">#FFFFFF</color>
+
+    <!-- Added missing colors to fix build -->
+    <color name="colorPrimary">#006C4C</color> <!-- mapped from md_theme_primary -->
+    <color name="backgroundColor">#FBFDF9</color> <!-- mapped from md_theme_background -->
+    <color name="colorSuccess">#4CAF50</color> <!-- standard green for success -->
 </resources>
