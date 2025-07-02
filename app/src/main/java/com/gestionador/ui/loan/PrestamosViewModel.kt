@@ -59,11 +59,11 @@ class PrestamosViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 // Crear el abono
-                repository.createAbono(abono).let { result ->
+                repository.guardarAbono(abono).let { result ->
                     result.fold(
                         onSuccess = {
                             // Actualizar el préstamo
-                            repository.updatePrestamo(prestamoActualizado).let { updateResult ->
+                            repository.guardarPrestamo(prestamoActualizado).let { updateResult ->
                                 updateResult.fold(
                                     onSuccess = { loadPrestamos() },
                                     onFailure = { e -> _error.value = e.message }

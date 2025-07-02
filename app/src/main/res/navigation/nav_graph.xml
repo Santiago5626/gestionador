@@ -81,6 +81,9 @@
         <argument
             android:name="prestamoId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_prestamoDetailFragment_to_addPrestamoFragment"
+            app:destination="@id/addPrestamoFragment" />
     </fragment>
 
     <!-- Activos Navigation -->
