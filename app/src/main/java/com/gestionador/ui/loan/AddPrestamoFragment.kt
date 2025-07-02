@@ -1,9 +1,11 @@
 package com.gestionador.ui.loan
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,6 +15,8 @@ import com.gestionador.data.models.Prestamo
 import com.gestionador.data.models.TipoPrestamo
 import com.gestionador.databinding.FragmentAddPrestamoBinding
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddPrestamoFragment : Fragment() {
 
@@ -20,6 +24,8 @@ class AddPrestamoFragment : Fragment() {
     private val binding get() = _binding!!
     
     private val viewModel: AddPrestamoViewModel by viewModels()
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    private var selectedDate = Calendar.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,8 +39,42 @@ class AddPrestamoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
+        setupSpinner()
+        setupDatePicker()
         setupObservers()
         setupClickListeners()
+    }
+    
+    private fun setupSpinner() {
+        val tipos = listOf("Diario", "Semanal", "Mensual")
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            tipos
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerTipo.adapter = adapter
+    }
+
+    private fun setupDatePicker() {
+        // Establecer la fecha actual por defecto
+        binding.etFechaInicio.setText(dateFormat.format(selectedDate.time))
+
+        // Configurar el click listener para mostrar el DatePickerDialog
+        binding.etFechaInicio.setOnClickListener {
+            DatePickerDialog(
+                requireContext(),
+                { _, year, month, dayOfMonth ->
+                    selectedDate.set(Calendar.YEAR, year)
+                    selectedDate.set(Calendar.MONTH, month)
+                    selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    binding.etFechaInicio.setText(dateFormat.format(selectedDate.time))
+                },
+                selectedDate.get(Calendar.YEAR),
+                selectedDate.get(Calendar.MONTH),
+                selectedDate.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
     }
     
     private fun setupObservers() {
@@ -65,22 +105,29 @@ class AddPrestamoFragment : Fragment() {
     
     private fun setupClickListeners() {
         binding.btnGuardar.setOnClickListener {
-            val tipo = binding.etTipo.text.toString()
+            val selectedIndex = binding.spinnerTipo.selectedItemPosition
+            val tipo = when (selectedIndex) {
+                0 -> TipoPrestamo.DIARIO
+                1 -> TipoPrestamo.SEMANAL
+                2 -> TipoPrestamo.MENSUAL
+                else -> TipoPrestamo.DIARIO
+            }
+            
             val montoTotal = binding.etMontoTotal.text.toString().toDoubleOrNull()
             val valorCuota = binding.etValorCuota.text.toString().toDoubleOrNull()
             val numeroCuotas = binding.etNumeroCuotas.text.toString().toIntOrNull()
-            val porcentajeInteres = binding.etPorcentajeInteres.text.toString().toDoubleOrNull()
-            val fechaInicio = binding.etFechaInicio.text.toString()
+            val porcentajeInteres = binding.etPorcentajeInteres.text.toString().toDoubleOrNull() ?: 0.0
             
-            if (validateInputs(tipo, montoTotal, valorCuota, numeroCuotas, porcentajeInteres, fechaInicio)) {
+            if (validateInputs(montoTotal, valorCuota, numeroCuotas)) {
                 val prestamo = Prestamo(
                     clienteId = "temp_client_id", // This should come from navigation args
                     clienteNombre = "Cliente Temporal", // This should come from navigation args
-                    tipo = TipoPrestamo.valueOf(tipo.uppercase()),
+                    tipo = tipo,
+                    fechaInicial = selectedDate.timeInMillis,
                     montoTotal = montoTotal!!,
                     valorCuotaPactada = valorCuota!!,
                     numeroCuota = numeroCuotas!!,
-                    porcentajeInteres = porcentajeInteres!!,
+                    porcentajeInteres = porcentajeInteres,
                     saldoRestante = montoTotal
                 )
                 viewModel.createPrestamo(prestamo)
@@ -93,19 +140,11 @@ class AddPrestamoFragment : Fragment() {
     }
     
     private fun validateInputs(
-        tipo: String,
         montoTotal: Double?,
         valorCuota: Double?,
-        numeroCuotas: Int?,
-        porcentajeInteres: Double?,
-        fechaInicio: String
+        numeroCuotas: Int?
     ): Boolean {
         var isValid = true
-        
-        if (tipo.isBlank()) {
-            binding.etTipo.error = "El tipo es requerido"
-            isValid = false
-        }
         
         if (montoTotal == null || montoTotal <= 0) {
             binding.etMontoTotal.error = "El monto debe ser mayor a 0"
@@ -119,16 +158,6 @@ class AddPrestamoFragment : Fragment() {
         
         if (numeroCuotas == null || numeroCuotas <= 0) {
             binding.etNumeroCuotas.error = "El número de cuotas debe ser mayor a 0"
-            isValid = false
-        }
-        
-        if (porcentajeInteres == null || porcentajeInteres < 0) {
-            binding.etPorcentajeInteres.error = "El porcentaje de interés debe ser mayor o igual a 0"
-            isValid = false
-        }
-        
-        if (fechaInicio.isBlank()) {
-            binding.etFechaInicio.error = "La fecha de inicio es requerida"
             isValid = false
         }
         

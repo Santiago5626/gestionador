@@ -32,26 +32,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_tipo"
-            style="@style/Widget.Gestionador.TextInputLayout"
+        <TextView
+            android:id="@+id/tv_tipo_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Tipo de préstamo"
+            android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
+            android:textColor="@color/textPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_cliente" />
+
+        <Spinner
+            android:id="@+id/spinner_tipo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Tipo de préstamo"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_chip"
+            android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_cliente">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_tipo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textColor="@color/textPrimary" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@id/tv_tipo_label" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_monto_total"
@@ -62,7 +63,7 @@
             android:hint="Monto total"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/til_tipo">
+            app:layout_constraintTop_toBottomOf="@id/spinner_tipo">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_monto_total"
