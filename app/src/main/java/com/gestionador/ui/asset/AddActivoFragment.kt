@@ -52,7 +52,7 @@ class AddActivoFragment : Fragment() {
     
     private fun setupUI() {
         // Cambiar título según el modo
-        binding.tvTitle.text = if (isEdit) "Editar Activo" else "Agregar Activo"
+        binding.textViewTitle.text = if (isEdit) "Editar Activo" else "Agregar Activo"
         binding.buttonGuardar.text = if (isEdit) "Actualizar" else "Guardar"
     }
     
