@@ -188,12 +188,12 @@ class PrestamoDetailFragment : Fragment() {
     private fun realizarAbono(prestamo: Prestamo, monto: Double) {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                val abono = Abono(
+                val abono = Abono.crearAbonoNormal(
                     prestamoId = prestamo.id,
-                    clienteId = prestamo.clienteId,
-                    monto = monto,
-                    fecha = System.currentTimeMillis(),
-                    numeroCuota = prestamo.numeroCuota
+                    numeroCuota = prestamo.numeroCuota,
+                    montoAbonado = monto,
+                    saldoRestante = prestamo.saldoRestante - monto,
+                    valorCuotaPactada = prestamo.valorCuotaPactada
                 )
                 
                 // Actualizar el préstamo
