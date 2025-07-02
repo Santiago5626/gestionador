@@ -72,6 +72,7 @@
             tools:progress="50" />
 
         <!-- Botones de abono, editar y eliminar -->
+<!--
         <ImageButton
             android:id="@+id/btn_abono"
             android:layout_width="48dp"
@@ -106,6 +107,7 @@
             android:tint="@color/md_theme_error"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

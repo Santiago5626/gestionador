@@ -304,19 +304,19 @@ class AddPrestamoFragment : Fragment() {
                         )
                     } else {
                         // Crear nuevo préstamo
-                        Prestamo(
-                            clienteId = selectedCliente!!.id,
-                            clienteNombre = selectedCliente!!.getNombreCompleto(),
-                            tipo = tipo,
-                            fechaInicial = selectedDate.timeInMillis,
-                            montoTotal = montoTotal!!, // Capital inicial
-                            valorCuotaPactada = 0.0, // No aplica para mensuales
-                            numeroCuota = 1,
-                            porcentajeInteres = porcentajeInteres!!,
-                            saldoRestante = montoTotal, // Capital actual = capital inicial
-                            interesesPendientes = 0.0, // Sin intereses pendientes al inicio
-                            ultimaFechaCalculoInteres = selectedDate.timeInMillis
-                        )
+                    Prestamo(
+                        clienteId = selectedCliente!!.id,
+                        clienteNombre = selectedCliente!!.getNombreCompleto(),
+                        tipo = tipo,
+                        fechaInicial = selectedDate.timeInMillis,
+                        montoTotal = montoTotal!!, // Capital inicial
+                        valorCuotaPactada = 0.0, // No aplica para mensuales
+                        numeroCuota = 1,
+                        porcentajeInteres = porcentajeInteres!!,
+                        saldoRestante = montoTotal + (montoTotal * porcentajeInteres / 100), // Capital + interés inicial
+                        interesesPendientes = 0.0, // Sin intereses pendientes al inicio
+                        ultimaFechaCalculoInteres = selectedDate.timeInMillis
+                    )
                     }
                     viewModel.createPrestamo(prestamo)
                 }
@@ -338,19 +338,19 @@ class AddPrestamoFragment : Fragment() {
                         )
                     } else {
                         // Crear nuevo préstamo
-                        Prestamo(
-                            clienteId = selectedCliente!!.id,
-                            clienteNombre = selectedCliente!!.getNombreCompleto(),
-                            tipo = tipo,
-                            fechaInicial = selectedDate.timeInMillis,
-                            montoTotal = montoTotal!!,
-                            valorCuotaPactada = valorCuota!!,
-                            numeroCuota = 1,
-                            porcentajeInteres = 0.0, // No aplica para diarios/semanales
-                            saldoRestante = montoTotal,
-                            interesesPendientes = 0.0,
-                            ultimaFechaCalculoInteres = selectedDate.timeInMillis
-                        )
+                    Prestamo(
+                        clienteId = selectedCliente!!.id,
+                        clienteNombre = selectedCliente!!.getNombreCompleto(),
+                        tipo = tipo,
+                        fechaInicial = selectedDate.timeInMillis,
+                        montoTotal = montoTotal!!,
+                        valorCuotaPactada = montoTotal, // Reemplazado valorCuota por montoTotal para diarios/semanales
+                        numeroCuota = 1,
+                        porcentajeInteres = 0.0, // No aplica para diarios/semanales
+                        saldoRestante = montoTotal,
+                        interesesPendientes = 0.0,
+                        ultimaFechaCalculoInteres = selectedDate.timeInMillis
+                    )
                     }
                     viewModel.createPrestamo(prestamo)
                 }

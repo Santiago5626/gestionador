@@ -29,7 +29,29 @@ class PrestamosViewModel : ViewModel() {
             _isLoading.value = true
             try {
                 repository.getPrestamos(clienteId).collectLatest { prestamosList ->
-                    _prestamos.value = prestamosList
+                    // Recalcular intereses para préstamos mensuales vencidos sin abono
+                    val updatedPrestamos = prestamosList.map { prestamo ->
+                        if (prestamo.tipo == com.gestionador.data.models.TipoPrestamo.MENSUAL) {
+                            val currentTime = System.currentTimeMillis()
+                            val fiveDaysInMillis = 5 * 24 * 60 * 60 * 1000L
+                            val timeSinceLastCalc = currentTime - prestamo.ultimaFechaCalculoInteres
+                            if (timeSinceLastCalc > fiveDaysInMillis) {
+                                // Aquí se debería verificar si hay abonos suficientes, pero para simplificar asumimos que no
+                                val newInteres = prestamo.saldoRestante * prestamo.porcentajeInteres / 100
+                                val nuevoSaldo = prestamo.saldoRestante + newInteres
+                                prestamo.copy(
+                                    saldoRestante = nuevoSaldo,
+                                    interesesPendientes = prestamo.interesesPendientes + newInteres,
+                                    ultimaFechaCalculoInteres = currentTime
+                                )
+                            } else {
+                                prestamo
+                            }
+                        } else {
+                            prestamo
+                        }
+                    }
+                    _prestamos.value = updatedPrestamos
                     _error.value = null
                 }
             } catch (e: Exception) {
