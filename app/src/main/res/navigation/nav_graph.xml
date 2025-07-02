@@ -84,7 +84,9 @@
         <action
             android:id="@+id/action_prestamoDetailFragment_to_addPrestamoFragment"
             app:destination="@id/addPrestamoFragment" />
-        <!-- Eliminar la acción que apunta a prestamoCartonFragment porque no existe -->
+        <action
+            android:id="@+id/action_prestamoDetailFragment_to_prestamoCartonFragment"
+            app:destination="@id/prestamoCartonFragment" />
     </fragment>
 
     <!-- Activos Navigation -->
