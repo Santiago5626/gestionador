@@ -20,6 +20,7 @@
     <color name="md_theme_onSurfaceVariant">#49454E</color>
     
     <!-- Custom Colors -->
+    <color name="colorPrimary">#6750A4</color>
     <color name="backgroundColor">#FFFBFE</color>
     <color name="surfaceColor">#FFFFFF</color>
     <color name="textPrimary">#1C1B1F</color>

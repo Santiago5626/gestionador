@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.Gestion.HeadlineLarge"
+        android:textAppearance="@style/TextAppearance.Gestionador.HeadlineLarge"
         android:textColor="@color/md_theme_primary"
         android:layout_marginBottom="48dp"
         app:layout_constraintBottom_toTopOf="@id/til_email"
@@ -20,7 +20,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_email"
-        style="@style/Widget.Gestion.TextInputLayout"
+        style="@style/Widget.Gestionador.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -44,7 +44,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_password"
-        style="@style/Widget.Gestion.TextInputLayout"
+        style="@style/Widget.Gestionador.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -67,7 +67,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_login"
-        style="@style/Widget.Gestion.Button"
+        style="@style/Widget.Gestionador.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
