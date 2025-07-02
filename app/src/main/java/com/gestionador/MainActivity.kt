@@ -2,29 +2,21 @@ package com.gestionador
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.gestionador.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    
-    private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
-        val navView: BottomNavigationView = binding.bottomNavigation
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
         
-        // Setup the bottom navigation view with nav controller
-        navView.setupWithNavController(navController)
-        
-        // Configure action bar with nav controller
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            title = destination.label
-        }
+        // Setup Bottom Navigation
+        findViewById<BottomNavigationView>(R.id.bottom_navigation)
+            .setupWithNavController(navController)
     }
 }

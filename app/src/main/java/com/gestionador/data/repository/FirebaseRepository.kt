@@ -1,169 +1,145 @@
 package com.gestionador.data.repository
 
+import com.gestionador.data.models.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.gestionador.data.models.*
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class FirebaseRepository {
     private val db = FirebaseFirestore.getInstance()
     
+    // Colecciones
+    private val clientesRef = db.collection("clientes")
+    private val prestamosRef = db.collection("prestamos")
+    private val abonosRef = db.collection("abonos")
+    private val activosRef = db.collection("activos")
+
     // Clientes
-    suspend fun addCliente(cliente: Cliente): Result<String> {
-        return try {
-            val docRef = db.collection("clientes").add(cliente).await()
+    suspend fun guardarCliente(cliente: Cliente): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            val docRef = if (cliente.id.isEmpty()) clientesRef.document() else clientesRef.document(cliente.id)
+            val clienteConId = cliente.copy(id = docRef.id)
+            docRef.set(clienteConId).await()
             Result.success(docRef.id)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-    
-    suspend fun getClientes(): Result<List<Cliente>> {
-        return try {
-            val snapshot = db.collection("clientes")
-                .orderBy("nombre")
-                .get()
-                .await()
-            val clientes = snapshot.documents.map { doc ->
-                doc.toObject(Cliente::class.java)?.copy(id = doc.id) ?: Cliente()
-            }
-            Result.success(clientes)
+
+    fun obtenerClientes(): Flow<List<Cliente>> = flow {
+        try {
+            val snapshot = clientesRef.orderBy("nombre").get().await()
+            val clientes = snapshot.documents.mapNotNull { it.toObject(Cliente::class.java) }
+            emit(clientes)
         } catch (e: Exception) {
-            Result.failure(e)
+            emit(emptyList())
         }
     }
-    
-    suspend fun updateCliente(cliente: Cliente): Result<Unit> {
-        return try {
-            db.collection("clientes").document(cliente.id).set(cliente).await()
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-    
-    suspend fun deleteCliente(clienteId: String): Result<Unit> {
-        return try {
-            db.collection("clientes").document(clienteId).delete().await()
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-    
+
     // Préstamos
-    suspend fun addPrestamo(prestamo: Prestamo): Result<String> {
-        return try {
-            val docRef = db.collection("prestamos").add(prestamo).await()
+    suspend fun guardarPrestamo(prestamo: Prestamo): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            val docRef = if (prestamo.id.isEmpty()) prestamosRef.document() else prestamosRef.document(prestamo.id)
+            val prestamoConId = prestamo.copy(id = docRef.id)
+            docRef.set(prestamoConId).await()
             Result.success(docRef.id)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-    
-    suspend fun getPrestamos(): Result<List<Prestamo>> {
-        return try {
-            val snapshot = db.collection("prestamos")
-                .orderBy("fechaInicial", Query.Direction.DESCENDING)
-                .get()
-                .await()
-            val prestamos = snapshot.documents.map { doc ->
-                doc.toObject(Prestamo::class.java)?.copy(id = doc.id) ?: Prestamo()
+
+    fun obtenerPrestamos(clienteId: String? = null): Flow<List<Prestamo>> = flow {
+        try {
+            val query = if (clienteId != null) {
+                prestamosRef.whereEqualTo("clienteId", clienteId)
+            } else {
+                prestamosRef
             }
-            Result.success(prestamos)
+            val snapshot = query.orderBy("fechaCreacion", Query.Direction.DESCENDING).get().await()
+            val prestamos = snapshot.documents.mapNotNull { it.toObject(Prestamo::class.java) }
+            emit(prestamos)
         } catch (e: Exception) {
-            Result.failure(e)
+            emit(emptyList())
         }
     }
-    
-    suspend fun getPrestamosByCliente(clienteId: String): Result<List<Prestamo>> {
-        return try {
-            val snapshot = db.collection("prestamos")
-                .whereEqualTo("clienteId", clienteId)
-                .orderBy("fechaInicial", Query.Direction.DESCENDING)
-                .get()
-                .await()
-            val prestamos = snapshot.documents.map { doc ->
-                doc.toObject(Prestamo::class.java)?.copy(id = doc.id) ?: Prestamo()
-            }
-            Result.success(prestamos)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-    
-    suspend fun updatePrestamo(prestamo: Prestamo): Result<Unit> {
-        return try {
-            db.collection("prestamos").document(prestamo.id).set(prestamo).await()
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-    
+
     // Abonos
-    suspend fun addAbono(abono: Abono): Result<String> {
-        return try {
-            val docRef = db.collection("abonos").add(abono).await()
+    suspend fun guardarAbono(abono: Abono): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            val docRef = if (abono.id.isEmpty()) abonosRef.document() else abonosRef.document(abono.id)
+            val abonoConId = abono.copy(id = docRef.id)
+            docRef.set(abonoConId).await()
             Result.success(docRef.id)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-    
-    suspend fun getAbonosByPrestamo(prestamoId: String): Result<List<Abono>> {
-        return try {
-            val snapshot = db.collection("abonos")
+
+    fun obtenerAbonos(prestamoId: String): Flow<List<Abono>> = flow {
+        try {
+            val snapshot = abonosRef
                 .whereEqualTo("prestamoId", prestamoId)
-                .orderBy("fechaAbono", Query.Direction.DESCENDING)
-                .get()
-                .await()
-            val abonos = snapshot.documents.map { doc ->
-                doc.toObject(Abono::class.java)?.copy(id = doc.id) ?: Abono()
-            }
-            Result.success(abonos)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-    
-    // Activos
-    suspend fun addActivo(activo: Activo): Result<String> {
-        return try {
-            val docRef = db.collection("activos").add(activo).await()
-            Result.success(docRef.id)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-    
-    suspend fun getActivos(): Result<List<Activo>> {
-        return try {
-            val snapshot = db.collection("activos")
                 .orderBy("fecha", Query.Direction.DESCENDING)
                 .get()
                 .await()
-            val activos = snapshot.documents.map { doc ->
-                doc.toObject(Activo::class.java)?.copy(id = doc.id) ?: Activo()
-            }
-            Result.success(activos)
+            val abonos = snapshot.documents.mapNotNull { it.toObject(Abono::class.java) }
+            emit(abonos)
+        } catch (e: Exception) {
+            emit(emptyList())
+        }
+    }
+
+    // Activos
+    suspend fun guardarActivo(activo: Activo): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            val docRef = if (activo.id.isEmpty()) activosRef.document() else activosRef.document(activo.id)
+            val activoConId = activo.copy(id = docRef.id)
+            docRef.set(activoConId).await()
+            Result.success(docRef.id)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-    
-    suspend fun updateActivo(activo: Activo): Result<Unit> {
-        return try {
-            db.collection("activos").document(activo.id).set(activo).await()
+
+    fun obtenerActivos(): Flow<List<Activo>> = flow {
+        try {
+            val snapshot = activosRef
+                .orderBy("fecha", Query.Direction.DESCENDING)
+                .get()
+                .await()
+            val activos = snapshot.documents.mapNotNull { it.toObject(Activo::class.java) }
+            emit(activos)
+        } catch (e: Exception) {
+            emit(emptyList())
+        }
+    }
+
+    // Eliminación
+    suspend fun eliminarCliente(clienteId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            clientesRef.document(clienteId).delete().await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-    
-    suspend fun deleteActivo(activoId: String): Result<Unit> {
-        return try {
-            db.collection("activos").document(activoId).delete().await()
+
+    suspend fun eliminarPrestamo(prestamoId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            prestamosRef.document(prestamoId).delete().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun eliminarActivo(activoId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            activosRef.document(activoId).delete().await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

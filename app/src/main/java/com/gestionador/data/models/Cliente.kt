@@ -6,8 +6,8 @@ data class Cliente(
     val nombre: String = "",
     val direccion: String = "",
     val telefono: String = "",
-    val createdAt: Long = System.currentTimeMillis()
+    val fechaCreacion: Long = System.currentTimeMillis()
 ) {
-    // Empty constructor for Firestore
-    constructor() : this("", "", "", "", "")
+    // Constructor sin argumentos requerido por Firebase
+    constructor() : this("", "", "", "", "", 0L)
 }
