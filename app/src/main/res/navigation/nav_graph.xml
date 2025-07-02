@@ -39,6 +39,12 @@
         <action
             android:id="@+id/action_clienteDetailFragment_to_prestamoDetailFragment"
             app:destination="@id/prestamoDetailFragment" />
+        <action
+            android:id="@+id/action_clienteDetailFragment_to_clientesFragment"
+            app:destination="@id/clientesFragment" />
+        <action
+            android:id="@+id/action_clienteDetailFragment_to_addClienteFragment"
+            app:destination="@id/addClienteFragment" />
     </fragment>
 
     <!-- Prestamos Navigation -->
