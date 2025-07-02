@@ -40,7 +40,6 @@ class ClienteDetailFragment : Fragment() {
         setupToolbar()
         setupRecyclerView()
         setupObservers()
-        setupClickListeners()
         
         viewModel.loadClientes()
     }
@@ -81,19 +80,13 @@ class ClienteDetailFragment : Fragment() {
             viewModel.clientes.collect { clientes ->
                 val cliente = clientes.find { it.id == args.clienteId }
                 cliente?.let {
-                    binding.textViewClienteId.text = "ID: ${it.id}"
-                    binding.textViewNombre.text = "${it.nombre} ${it.apellido}"
+                    // Removido textViewClienteId ya que no existe en el nuevo layout
+                    binding.textViewNombre.text = it.getNombreCompleto() // Usa el método que solo devuelve el nombre
                     binding.textViewCedula.text = "Cédula: ${it.cedula}"
                     binding.textViewTelefono.text = "Tel: ${it.telefono}"
                     binding.textViewDireccion.text = it.direccion
                 }
             }
-        }
-    }
-    
-    private fun setupClickListeners() {
-        binding.fabAddPrestamo.setOnClickListener {
-            // TODO: Navigate to add prestamo
         }
     }
     
