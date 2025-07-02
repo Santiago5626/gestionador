@@ -108,7 +108,7 @@ class PrestamoDetailFragment : Fragment() {
     private fun loadAbonosData() {
         currentPrestamo?.let { prestamo ->
             viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.getAbonos(prestamo.id).collect { abonos ->
+                viewModel.obtenerAbonos(prestamo.id).collect { abonos ->
                     displayAbonosData(abonos, prestamo)
                 }
             }
@@ -149,6 +149,7 @@ class PrestamoDetailFragment : Fragment() {
     private fun displayAbonosData(abonos: List<Abono>, prestamo: Prestamo) {
         if (!::cartonAdapter.isInitialized) {
             cartonAdapter = PrestamoCartonAdapter()
+            // RecyclerView id corrected to rvCarton as per layout file
             binding.rvCarton.adapter = cartonAdapter
         }
         cartonAdapter.submitList(abonos)
