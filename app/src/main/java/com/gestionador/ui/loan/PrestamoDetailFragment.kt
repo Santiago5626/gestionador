@@ -144,12 +144,23 @@ class PrestamoDetailFragment : Fragment() {
         }
         binding.tvTipoPrestamo.text = tipoText
         
-        // Interés
-        val interesText = if (prestamo.tipo == TipoPrestamo.MENSUAL) {
-            "${prestamo.porcentajeInteres}% Mensual"
+        // Calcular interés y porcentaje de interés
+        val interes = prestamo.saldoRestante - prestamo.montoTotal
+        val porcentajeInteres = if (prestamo.montoTotal != 0.0) {
+            (interes / prestamo.montoTotal) * 100
         } else {
-            val cuotaFormatted = String.format("%,.0f", prestamo.valorCuotaPactada)
-            "$$cuotaFormatted por cuota"
+            0.0
+        }
+        
+        // Formatear interés y porcentaje
+        val interesFormatted = String.format("%,.0f", interes)
+        val porcentajeInteresFormatted = String.format("%.2f", porcentajeInteres)
+        
+        // Mostrar interés y porcentaje de interés
+        val interesText = if (prestamo.tipo == TipoPrestamo.MENSUAL) {
+            "$porcentajeInteresFormatted% Mensual"
+        } else {
+            "$$interesFormatted de interés"
         }
         binding.tvInteres.text = interesText
     }
