@@ -2,9 +2,6 @@ package com.gestionador.ui.client
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
@@ -45,7 +42,7 @@ class ClienteDetailFragment : Fragment() {
         setupObservers()
         setupClickListeners()
         
-        viewModel.loadCliente(args.clienteId)
+        viewModel.loadClientes()
     }
     
     private fun setupToolbar() {
@@ -56,9 +53,7 @@ class ClienteDetailFragment : Fragment() {
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_edit -> {
-                    findNavController().navigate(
-                        ClienteDetailFragmentDirections.actionClienteDetailFragmentToAddClienteFragment(args.clienteId)
-                    )
+                    // TODO: Navigate to edit client
                     true
                 }
                 R.id.action_delete -> {
@@ -72,9 +67,7 @@ class ClienteDetailFragment : Fragment() {
     
     private fun setupRecyclerView() {
         prestamosAdapter = PrestamosAdapter { prestamo ->
-            findNavController().navigate(
-                ClienteDetailFragmentDirections.actionClienteDetailFragmentToPrestamoDetailFragment(prestamo.id)
-            )
+            // TODO: Navigate to prestamo detail
         }
         
         binding.recyclerViewPrestamos.apply {
@@ -85,7 +78,8 @@ class ClienteDetailFragment : Fragment() {
     
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.cliente.collect { cliente ->
+            viewModel.clientes.collect { clientes ->
+                val cliente = clientes.find { it.id == args.clienteId }
                 cliente?.let {
                     binding.textViewClienteId.text = "ID: ${it.id}"
                     binding.textViewNombre.text = "${it.nombre} ${it.apellido}"
@@ -95,20 +89,11 @@ class ClienteDetailFragment : Fragment() {
                 }
             }
         }
-        
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.prestamos.collect { prestamos ->
-                prestamosAdapter.submitList(prestamos)
-                binding.textViewNoPrestamos.visibility = if (prestamos.isEmpty()) View.VISIBLE else View.GONE
-            }
-        }
     }
     
     private fun setupClickListeners() {
         binding.fabAddPrestamo.setOnClickListener {
-            findNavController().navigate(
-                ClienteDetailFragmentDirections.actionClienteDetailFragmentToAddPrestamoFragment(args.clienteId)
-            )
+            // TODO: Navigate to add prestamo
         }
     }
     
