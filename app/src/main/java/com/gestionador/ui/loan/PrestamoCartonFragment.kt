@@ -36,8 +36,24 @@ class PrestamoCartonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupHeader()
         setupRecyclerView()
         loadCartonData()
+    }
+
+    private fun setupHeader() {
+        val clienteNombre = arguments?.getString("clienteNombre") ?: "N/A"
+        val montoTotal = arguments?.getDouble("montoTotal") ?: 0.0
+        val fechaInicial = arguments?.getLong("fechaInicial") ?: 0L
+
+        binding.tvClienteNombre.text = clienteNombre
+        binding.tvMontoPrestado.text = "Monto prestado: $${String.format("%,.0f", montoTotal)}"
+        if (fechaInicial != 0L) {
+            val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+            binding.tvFechaPrestamo.text = "Fecha del préstamo: ${sdf.format(java.util.Date(fechaInicial))}"
+        } else {
+            binding.tvFechaPrestamo.text = "Fecha del préstamo: N/A"
+        }
     }
 
     private fun setupRecyclerView() {
