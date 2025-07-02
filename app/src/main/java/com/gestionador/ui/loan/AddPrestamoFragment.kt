@@ -12,9 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.gestionador.data.models.Cliente
 import com.gestionador.data.models.Prestamo
 import com.gestionador.data.models.TipoPrestamo
 import com.gestionador.databinding.FragmentAddPrestamoBinding
+import com.gestionador.ui.client.ClientesViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,8 +27,12 @@ class AddPrestamoFragment : Fragment() {
     private val binding get() = _binding!!
     
     private val viewModel: AddPrestamoViewModel by viewModels()
+    private val clientesViewModel: ClientesViewModel by viewModels()
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private var selectedDate = Calendar.getInstance()
+    
+    private var clientes: List<Cliente> = emptyList()
+    private var selectedCliente: Cliente? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,22 +46,26 @@ class AddPrestamoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        setupSpinner()
+        setupSpinners()
         setupDatePicker()
         setupObservers()
         setupClickListeners()
         updateFieldsVisibility(TipoPrestamo.DIARIO) // Por defecto
+        
+        // Cargar clientes
+        clientesViewModel.loadClientes()
     }
     
-    private fun setupSpinner() {
+    private fun setupSpinners() {
+        // Spinner de tipos de préstamo
         val tipos = listOf("Diario", "Semanal", "Mensual")
-        val adapter = ArrayAdapter(
+        val tipoAdapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
             tipos
         )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerTipo.adapter = adapter
+        tipoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerTipo.adapter = tipoAdapter
         
         // Listener para cambiar la visibilidad de campos según el tipo
         binding.spinnerTipo.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -70,6 +80,21 @@ class AddPrestamoFragment : Fragment() {
             }
             
             override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        
+        // Listener para selección de cliente
+        binding.spinnerCliente.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position > 0 && clientes.isNotEmpty()) { // Posición 0 es "Seleccionar cliente"
+                    selectedCliente = clientes[position - 1]
+                } else {
+                    selectedCliente = null
+                }
+            }
+            
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectedCliente = null
+            }
         }
     }
     
@@ -111,6 +136,14 @@ class AddPrestamoFragment : Fragment() {
     }
     
     private fun setupObservers() {
+        // Observar clientes
+        viewLifecycleOwner.lifecycleScope.launch {
+            clientesViewModel.clientes.collect { clientesList ->
+                clientes = clientesList
+                setupClienteSpinner()
+            }
+        }
+        
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.isLoading.collect { isLoading ->
                 binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
@@ -136,8 +169,26 @@ class AddPrestamoFragment : Fragment() {
         }
     }
     
+    private fun setupClienteSpinner() {
+        val clienteNames = mutableListOf("Seleccionar cliente")
+        clienteNames.addAll(clientes.map { it.getNombreCompleto() })
+        
+        val clienteAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            clienteNames
+        )
+        clienteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerCliente.adapter = clienteAdapter
+    }
+    
     private fun setupClickListeners() {
         binding.btnGuardar.setOnClickListener {
+            if (selectedCliente == null) {
+                Toast.makeText(requireContext(), "Debe seleccionar un cliente", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            
             val selectedIndex = binding.spinnerTipo.selectedItemPosition
             val tipo = when (selectedIndex) {
                 0 -> TipoPrestamo.DIARIO
@@ -154,8 +205,8 @@ class AddPrestamoFragment : Fragment() {
                 
                 if (validateInputsMensual(montoTotal, porcentajeInteres)) {
                     val prestamo = Prestamo(
-                        clienteId = "temp_client_id", // This should come from navigation args
-                        clienteNombre = "Cliente Temporal", // This should come from navigation args
+                        clienteId = selectedCliente!!.id,
+                        clienteNombre = selectedCliente!!.getNombreCompleto(),
                         tipo = tipo,
                         fechaInicial = selectedDate.timeInMillis,
                         montoTotal = montoTotal!!, // Capital inicial
@@ -174,8 +225,8 @@ class AddPrestamoFragment : Fragment() {
                 
                 if (validateInputsNormal(montoTotal, valorCuota)) {
                     val prestamo = Prestamo(
-                        clienteId = "temp_client_id", // This should come from navigation args
-                        clienteNombre = "Cliente Temporal", // This should come from navigation args
+                        clienteId = selectedCliente!!.id,
+                        clienteNombre = selectedCliente!!.getNombreCompleto(),
                         tipo = tipo,
                         fechaInicial = selectedDate.timeInMillis,
                         montoTotal = montoTotal!!,
