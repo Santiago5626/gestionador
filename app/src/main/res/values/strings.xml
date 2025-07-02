@@ -55,4 +55,6 @@
     <string name="error_network">Error de conexión</string>
     <string name="error_unknown">Error desconocido</string>
     <string name="error_firebase">Error en Firebase</string>
+    <string name="monto_a_prestar">Monto a prestar</string>
+    <string name="valor_a_devolver">Valor a devolver</string>
 </resources>

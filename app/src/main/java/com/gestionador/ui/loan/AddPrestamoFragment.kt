@@ -128,12 +128,15 @@ class AddPrestamoFragment : Fragment() {
                 // Para préstamos mensuales: mostrar porcentaje de interés, ocultar valor de cuota
                 binding.tilPorcentajeInteres.visibility = View.VISIBLE
                 binding.tilValorCuota.visibility = View.GONE
-                binding.tilPorcentajeInteres.hint = "Porcentaje de interés mensual (%)"
+                binding.tilPorcentajeInteres.hint = getString(R.string.porcentaje_interes)
+                binding.tilMontoTotal.hint = getString(R.string.monto_a_prestar)
             }
             else -> {
-                // Para préstamos diarios y semanales: mostrar valor de cuota, ocultar porcentaje
+                // Para préstamos diarios y semanales: mostrar valor a devolver, ocultar porcentaje
                 binding.tilPorcentajeInteres.visibility = View.GONE
                 binding.tilValorCuota.visibility = View.VISIBLE
+                binding.tilValorCuota.hint = getString(R.string.valor_a_devolver)
+                binding.tilMontoTotal.hint = getString(R.string.monto_a_prestar)
             }
         }
     }
@@ -323,9 +326,9 @@ class AddPrestamoFragment : Fragment() {
                 }
             } else {
                 // Para préstamos diarios y semanales
-                val valorCuota = binding.etValorCuota.text.toString().toDoubleOrNull()
+                val valorDevolver = binding.etValorCuota.text.toString().toDoubleOrNull()
                 
-                if (validateInputsNormal(montoTotal, valorCuota)) {
+                if (validateInputsNormal(montoTotal, valorDevolver)) {
                     val prestamo = if (isEdit && currentPrestamo != null) {
                         // Actualizar préstamo existente
                         currentPrestamo!!.copy(
@@ -334,7 +337,7 @@ class AddPrestamoFragment : Fragment() {
                             tipo = tipo,
                             fechaInicial = selectedDate.timeInMillis,
                             montoTotal = montoTotal!!,
-                            valorCuotaPactada = valorCuota!!,
+                            valorCuotaPactada = valorDevolver!!,
                             porcentajeInteres = 0.0
                         )
                     } else {
@@ -345,7 +348,7 @@ class AddPrestamoFragment : Fragment() {
                         tipo = tipo,
                         fechaInicial = selectedDate.timeInMillis,
                         montoTotal = montoTotal!!,
-                        valorCuotaPactada = montoTotal, // Reemplazado valorCuota por montoTotal para diarios/semanales
+                        valorCuotaPactada = valorDevolver!!, // Usar valor a devolver para diarios/semanales
                         numeroCuota = 1,
                         porcentajeInteres = 0.0, // No aplica para diarios/semanales
                         saldoRestante = montoTotal,
