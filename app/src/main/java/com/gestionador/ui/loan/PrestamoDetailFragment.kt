@@ -52,6 +52,7 @@ class PrestamoDetailFragment : Fragment() {
         setupObservers()
         setupClickListeners()
         loadPrestamoData()
+        loadAbonosData()
     }
     
     private fun setupObservers() {
@@ -104,6 +105,16 @@ class PrestamoDetailFragment : Fragment() {
         viewModel.loadPrestamos()
     }
     
+    private fun loadAbonosData() {
+        currentPrestamo?.let { prestamo ->
+            viewModel.viewModelScope.launch {
+                viewModel.repository.obtenerAbonos(prestamo.id).collect { abonos ->
+                    displayAbonosData(abonos, prestamo)
+                }
+            }
+        }
+    }
+    
     private fun displayPrestamoData(prestamo: Prestamo) {
         binding.tvClienteNombre.text = prestamo.clienteNombre
         binding.tvFechaCreacion.text = "Creado el ${dateFormat.format(Date(prestamo.fechaInicial))}"
@@ -131,6 +142,16 @@ class PrestamoDetailFragment : Fragment() {
             "$$cuotaFormatted por cuota"
         }
         binding.tvInteres.text = interesText
+    }
+    
+    private lateinit var cartonAdapter: PrestamoCartonAdapter
+
+    private fun displayAbonosData(abonos: List<Abono>, prestamo: Prestamo) {
+        if (!::cartonAdapter.isInitialized) {
+            cartonAdapter = PrestamoCartonAdapter()
+            binding.rvCarton.adapter = cartonAdapter
+        }
+        cartonAdapter.submitList(abonos)
     }
     
     private fun showDeleteConfirmationDialog() {
