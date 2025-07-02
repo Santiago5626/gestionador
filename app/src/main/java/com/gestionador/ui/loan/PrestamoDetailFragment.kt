@@ -177,6 +177,26 @@ class PrestamoDetailFragment : Fragment() {
             binding.rvCarton.adapter = cartonAdapter
         }
         cartonAdapter.submitList(abonos)
+
+        // Calcular saldo restante como monto total menos suma de abonos
+        val sumaAbonos = abonos.sumOf { it.montoAbonado }
+        val saldoRestanteCalculado = prestamo.montoTotal - sumaAbonos
+
+        // Calcular interés como porcentaje
+        val interes = if (prestamo.montoTotal != 0.0) {
+            ((prestamo.montoTotal - saldoRestanteCalculado) / prestamo.montoTotal) * 100
+        } else {
+            0.0
+        }
+
+        // Actualizar la UI con los valores corregidos
+        val montoTotalFormatted = String.format("%,.0f", prestamo.montoTotal)
+        val saldoRestanteFormatted = String.format("%,.0f", saldoRestanteCalculado)
+        val interesFormatted = String.format("%.2f", interes)
+
+        binding.tvMontoTotal.text = "$$montoTotalFormatted"
+        binding.tvSaldoRestante.text = "$$saldoRestanteFormatted"
+        binding.tvInteres.text = "$interesFormatted% de interés"
     }
     
     private fun showDeleteConfirmationDialog() {
