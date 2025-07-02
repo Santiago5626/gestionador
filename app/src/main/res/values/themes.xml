@@ -1,101 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Base application theme using Material3 -->
-    <style name="Theme.Gestion" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Material3 colors -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme -->
+    <style name="Base.Theme.Gestion" parent="Theme.Material3.DayNight">
+        <!-- Primary colors -->
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
         <item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer</item>
+        
+        <!-- Secondary colors -->
         <item name="colorSecondary">@color/md_theme_secondary</item>
         <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
         <item name="colorSecondaryContainer">@color/md_theme_secondaryContainer</item>
         <item name="colorOnSecondaryContainer">@color/md_theme_onSecondaryContainer</item>
         
-        <!-- Background colors -->
-        <item name="android:colorBackground">@color/backgroundColor</item>
-        <item name="colorSurface">@color/surfaceColor</item>
-        <item name="colorOnSurface">@color/textPrimary</item>
+        <!-- Surface colors -->
+        <item name="colorSurface">@color/md_theme_surface</item>
+        <item name="colorOnSurface">@color/md_theme_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant</item>
         
-        <!-- Status bar and navigation bar -->
-        <item name="android:statusBarColor">@color/backgroundColor</item>
-        <item name="android:navigationBarColor">@color/backgroundColor</item>
+        <!-- Background -->
+        <item name="android:colorBackground">@color/md_theme_background</item>
+        <item name="colorOnBackground">@color/md_theme_onBackground</item>
+        
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/md_theme_primary</item>
         <item name="android:windowLightStatusBar">false</item>
-        
-        <!-- Text appearance -->
-        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.Gestion.HeadlineLarge</item>
-        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.Gestion.HeadlineMedium</item>
-        <item name="textAppearanceBodyLarge">@style/TextAppearance.Gestion.BodyLarge</item>
-        <item name="textAppearanceBodyMedium">@style/TextAppearance.Gestion.BodyMedium</item>
-        
-        <!-- Component styles -->
-        <item name="materialCardViewStyle">@style/Widget.Gestion.CardView</item>
-        <item name="textInputStyle">@style/Widget.Gestion.TextInputLayout</item>
-        <item name="materialButtonStyle">@style/Widget.Gestion.Button</item>
-        <item name="chipStyle">@style/Widget.Gestion.Chip</item>
-        <item name="bottomNavigationStyle">@style/Widget.Gestion.BottomNavigation</item>
     </style>
 
-    <!-- Typography styles -->
+    <style name="Theme.Gestion" parent="Base.Theme.Gestion" />
+
+    <!-- Text Appearances -->
     <style name="TextAppearance.Gestion.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
-        <item name="fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/textPrimary</item>
-    </style>
-
-    <style name="TextAppearance.Gestion.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
-        <item name="fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.Gestion.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
-        <item name="fontFamily">sans-serif</item>
-        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/textPrimary</item>
     </style>
 
     <style name="TextAppearance.Gestion.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
-        <item name="fontFamily">sans-serif</item>
-        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/textSecondary</item>
     </style>
 
-    <!-- Component styles -->
-    <style name="Widget.Gestion.CardView" parent="Widget.Material3.CardView.Elevated">
-        <item name="cardElevation">2dp</item>
-        <item name="cardCornerRadius">12dp</item>
-        <item name="cardBackgroundColor">@color/surfaceColor</item>
-        <item name="rippleColor">@color/md_theme_primary</item>
+    <!-- Widget Styles -->
+    <style name="Widget.Gestion.Button" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/md_theme_primary</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:padding">12dp</item>
     </style>
 
     <style name="Widget.Gestion.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/md_theme_primary</item>
-        <item name="hintTextColor">@color/md_theme_primary</item>
+        <item name="hintTextColor">@color/textHint</item>
         <item name="android:textColorHint">@color/textHint</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
     </style>
 
-    <style name="Widget.Gestion.Button" parent="Widget.Material3.Button">
-        <item name="android:textSize">16sp</item>
-        <item name="android:padding">16dp</item>
-        <item name="cornerRadius">12dp</item>
-        <item name="android:textAppearance">@style/TextAppearance.Gestion.BodyLarge</item>
+    <style name="Widget.Gestion.CardView" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/surfaceColor</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="strokeWidth">0dp</item>
     </style>
 
     <style name="Widget.Gestion.Chip" parent="Widget.Material3.Chip.Filter">
-        <item name="chipBackgroundColor">@color/surfaceVariant</item>
-        <item name="android:textColor">@color/textPrimary</item>
-        <item name="chipStrokeWidth">0dp</item>
-        <item name="chipCornerRadius">8dp</item>
+        <item name="chipBackgroundColor">@color/md_theme_primaryContainer</item>
+        <item name="android:textColor">@color/md_theme_onPrimaryContainer</item>
+        <item name="chipCornerRadius">20dp</item>
     </style>
 
     <style name="Widget.Gestion.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
         <item name="backgroundTint">@color/surfaceColor</item>
         <item name="itemIconTint">@color/md_theme_primary</item>
-        <item name="itemTextColor">@color/textPrimary</item>
-        <item name="itemRippleColor">@color/md_theme_primaryContainer</item>
+        <item name="itemTextColor">@color/md_theme_primary</item>
     </style>
-
-    <!-- Theme.Gestionador alias for compatibility -->
-    <style name="Theme.Gestionador" parent="Theme.Gestion" />
 </resources>
