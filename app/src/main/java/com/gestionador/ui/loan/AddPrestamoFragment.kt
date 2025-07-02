@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.gestionador.data.models.Prestamo
+import com.gestionador.data.models.TipoPrestamo
 import com.gestionador.databinding.FragmentAddPrestamoBinding
 import kotlinx.coroutines.launch
 
@@ -74,12 +75,13 @@ class AddPrestamoFragment : Fragment() {
             if (validateInputs(tipo, montoTotal, valorCuota, numeroCuotas, porcentajeInteres, fechaInicio)) {
                 val prestamo = Prestamo(
                     clienteId = "temp_client_id", // This should come from navigation args
-                    tipo = tipo,
+                    clienteNombre = "Cliente Temporal", // This should come from navigation args
+                    tipo = TipoPrestamo.valueOf(tipo.uppercase()),
                     montoTotal = montoTotal!!,
-                    valorCuota = valorCuota!!,
-                    numeroCuotas = numeroCuotas!!,
+                    valorCuotaPactada = valorCuota!!,
+                    numeroCuota = numeroCuotas!!,
                     porcentajeInteres = porcentajeInteres!!,
-                    fechaInicio = System.currentTimeMillis() // Should parse from fechaInicio string
+                    saldoRestante = montoTotal
                 )
                 viewModel.createPrestamo(prestamo)
             }

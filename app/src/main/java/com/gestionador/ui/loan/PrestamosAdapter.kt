@@ -41,10 +41,10 @@ class PrestamosAdapter(
 
         fun bind(prestamo: Prestamo) {
             binding.apply {
-                chipTipo.text = prestamo.tipo
-                tvCliente.text = "Cliente ID: ${prestamo.clienteId}" // Should load actual client name
+                chipTipo.text = prestamo.getTipoString()
+                tvCliente.text = prestamo.clienteNombre
                 tvMonto.text = "$${String.format("%.2f", prestamo.montoTotal)}"
-                tvCuota.text = "Cuota: $${String.format("%.2f", prestamo.valorCuota)}"
+                tvCuota.text = "Cuota: $${String.format("%.2f", prestamo.valorCuotaPactada)}"
                 
                 // Calculate progress based on payments made
                 val progress = calculateProgress(prestamo)
@@ -53,9 +53,9 @@ class PrestamosAdapter(
         }
         
         private fun calculateProgress(prestamo: Prestamo): Int {
-            // This should calculate based on actual payments made
-            // For now, return a placeholder value
-            return 50
+            // Calculate progress as percentage of amount paid
+            val amountPaid = prestamo.montoTotal - prestamo.saldoRestante
+            return ((amountPaid / prestamo.montoTotal) * 100).toInt()
         }
     }
 
