@@ -30,3 +30,4 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewPrestamoId" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

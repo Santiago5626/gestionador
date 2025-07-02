@@ -2,7 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.Gestion.CardView"
+    style="@style/Widget.Gestionador.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
+            android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
             android:textColor="@color/textSecondary"
             app:layout_constraintStart_toEndOf="@id/iv_money_icon"
             app:layout_constraintTop_toTopOf="parent"
@@ -61,7 +61,7 @@
             android:id="@+id/tv_monto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.Gestion.BodyLarge"
+            android:textAppearance="@style/TextAppearance.Gestionador.BodyLarge"
             android:textColor="@color/colorSuccess"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -75,7 +75,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
-            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
+            android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
             android:textColor="@color/textPrimary"
             app:layout_constraintEnd_toStartOf="@id/tv_monto"
             app:layout_constraintStart_toEndOf="@id/iv_money_icon"
@@ -85,3 +85,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
+

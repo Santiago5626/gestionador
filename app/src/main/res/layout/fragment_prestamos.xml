@@ -17,7 +17,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="Préstamos"
-            android:textAppearance="@style/TextAppearance.Gestion.HeadlineLarge"
+            android:textAppearance="@style/TextAppearance.Gestionador.HeadlineLarge"
             android:textColor="@color/textPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_todos"
-                style="@style/Widget.Gestion.Chip"
+                style="@style/Widget.Gestionador.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
@@ -44,21 +44,21 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_diarios"
-                style="@style/Widget.Gestion.Chip"
+                style="@style/Widget.Gestionador.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Diarios" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_semanales"
-                style="@style/Widget.Gestion.Chip"
+                style="@style/Widget.Gestionador.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Semanales" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_mensuales"
-                style="@style/Widget.Gestion.Chip"
+                style="@style/Widget.Gestionador.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mensuales" />
@@ -84,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No hay préstamos registrados"
-            android:textAppearance="@style/TextAppearance.Gestion.BodyLarge"
+            android:textAppearance="@style/TextAppearance.Gestionador.BodyLarge"
             android:textColor="@color/textSecondary"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -118,3 +118,4 @@
         app:elevation="6dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

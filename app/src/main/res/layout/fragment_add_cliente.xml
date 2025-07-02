@@ -16,14 +16,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nuevo Cliente"
-            android:textAppearance="@style/TextAppearance.Gestion.HeadlineLarge"
+            android:textAppearance="@style/TextAppearance.Gestionador.HeadlineLarge"
             android:textColor="@color/textPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_cedula"
-            style="@style/Widget.Gestion.TextInputLayout"
+            style="@style/Widget.Gestionador.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -44,7 +44,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_nombre"
-            style="@style/Widget.Gestion.TextInputLayout"
+            style="@style/Widget.Gestionador.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -65,7 +65,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_apellido"
-            style="@style/Widget.Gestion.TextInputLayout"
+            style="@style/Widget.Gestionador.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -86,7 +86,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_direccion"
-            style="@style/Widget.Gestion.TextInputLayout"
+            style="@style/Widget.Gestionador.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -107,7 +107,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_telefono"
-            style="@style/Widget.Gestion.TextInputLayout"
+            style="@style/Widget.Gestionador.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -148,7 +148,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_guardar"
-                style="@style/Widget.Gestion.Button"
+                style="@style/Widget.Gestionador.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -171,3 +171,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>
+

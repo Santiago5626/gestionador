@@ -2,7 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.Gestion.CardView"
+    style="@style/Widget.Gestionador.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
@@ -22,7 +22,7 @@
             android:backgroundTint="@color/md_theme_primary"
             android:gravity="center"
             android:text="JP"
-            android:textAppearance="@style/TextAppearance.Gestion.BodyLarge"
+            android:textAppearance="@style/TextAppearance.Gestionador.BodyLarge"
             android:textColor="@color/textPrimary"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
-            android:textAppearance="@style/TextAppearance.Gestion.BodyLarge"
+            android:textAppearance="@style/TextAppearance.Gestionador.BodyLarge"
             android:textColor="@color/textPrimary"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +50,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
-            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
+            android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
             android:textColor="@color/textSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_avatar"
@@ -64,7 +64,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
-            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
+            android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
             android:textColor="@color/textSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_avatar"
@@ -78,7 +78,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
-            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
+            android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
             android:textColor="@color/textSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_avatar"
@@ -88,3 +88,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
+

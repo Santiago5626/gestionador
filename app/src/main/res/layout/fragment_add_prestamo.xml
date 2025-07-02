@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nuevo Préstamo"
-            android:textAppearance="@style/TextAppearance.Gestion.HeadlineLarge"
+            android:textAppearance="@style/TextAppearance.Gestionador.HeadlineLarge"
             android:textColor="@color/textPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +30,7 @@
             android:layout_marginTop="16dp"
             android:background="@color/surfaceColor"
             android:padding="12dp"
-            android:textAppearance="@style/TextAppearance.Gestion.BodyLarge"
+            android:textAppearance="@style/TextAppearance.Gestionador.BodyLarge"
             android:textColor="@color/textPrimary"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +42,7 @@
         <!-- Selector de cliente (cuando no viene de un cliente específico) -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_cliente"
-            style="@style/Widget.Gestion.TextInputLayout"
+            style="@style/Widget.Gestionador.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -60,7 +60,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_tipo"
-            style="@style/Widget.Gestion.TextInputLayout"
+            style="@style/Widget.Gestionador.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -78,7 +78,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_monto_total"
-            style="@style/Widget.Gestion.TextInputLayout"
+            style="@style/Widget.Gestionador.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -99,7 +99,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_valor_cuota"
-            style="@style/Widget.Gestion.TextInputLayout"
+            style="@style/Widget.Gestionador.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -120,7 +120,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_numero_cuotas"
-            style="@style/Widget.Gestion.TextInputLayout"
+            style="@style/Widget.Gestionador.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -140,7 +140,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_porcentaje_interes"
-            style="@style/Widget.Gestion.TextInputLayout"
+            style="@style/Widget.Gestionador.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -181,7 +181,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_guardar"
-                style="@style/Widget.Gestion.Button"
+                style="@style/Widget.Gestionador.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -204,3 +204,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>
+
