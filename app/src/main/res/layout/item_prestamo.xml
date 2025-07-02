@@ -109,6 +109,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 -->
 
+        <!-- Se elimina el botón "Ver Cartón" de la vista previa del préstamo -->
+        <!--
         <Button
             android:id="@+id/btn_ver_carton"
             android:layout_width="wrap_content"
@@ -118,6 +120,7 @@
             app:layout_constraintTop_toBottomOf="@id/progress_bar"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp" />
+        -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
