@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -43,6 +44,7 @@ class AddPrestamoFragment : Fragment() {
         setupDatePicker()
         setupObservers()
         setupClickListeners()
+        updateFieldsVisibility(TipoPrestamo.DIARIO) // Por defecto
     }
     
     private fun setupSpinner() {
@@ -54,6 +56,37 @@ class AddPrestamoFragment : Fragment() {
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerTipo.adapter = adapter
+        
+        // Listener para cambiar la visibilidad de campos según el tipo
+        binding.spinnerTipo.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val tipo = when (position) {
+                    0 -> TipoPrestamo.DIARIO
+                    1 -> TipoPrestamo.SEMANAL
+                    2 -> TipoPrestamo.MENSUAL
+                    else -> TipoPrestamo.DIARIO
+                }
+                updateFieldsVisibility(tipo)
+            }
+            
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+    
+    private fun updateFieldsVisibility(tipo: TipoPrestamo) {
+        when (tipo) {
+            TipoPrestamo.MENSUAL -> {
+                // Para préstamos mensuales: mostrar porcentaje de interés, ocultar valor de cuota
+                binding.tilPorcentajeInteres.visibility = View.VISIBLE
+                binding.tilValorCuota.visibility = View.GONE
+                binding.tilPorcentajeInteres.hint = "Porcentaje de interés mensual (%)"
+            }
+            else -> {
+                // Para préstamos diarios y semanales: mostrar valor de cuota, ocultar porcentaje
+                binding.tilPorcentajeInteres.visibility = View.GONE
+                binding.tilValorCuota.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun setupDatePicker() {
@@ -114,22 +147,47 @@ class AddPrestamoFragment : Fragment() {
             }
             
             val montoTotal = binding.etMontoTotal.text.toString().toDoubleOrNull()
-            val valorCuota = binding.etValorCuota.text.toString().toDoubleOrNull()
-            val porcentajeInteres = binding.etPorcentajeInteres.text.toString().toDoubleOrNull() ?: 0.0
             
-            if (validateInputs(montoTotal, valorCuota)) {
-                val prestamo = Prestamo(
-                    clienteId = "temp_client_id", // This should come from navigation args
-                    clienteNombre = "Cliente Temporal", // This should come from navigation args
-                    tipo = tipo,
-                    fechaInicial = selectedDate.timeInMillis,
-                    montoTotal = montoTotal!!,
-                    valorCuotaPactada = valorCuota!!,
-                    numeroCuota = 1, // Siempre inicia en 1
-                    porcentajeInteres = porcentajeInteres,
-                    saldoRestante = montoTotal
-                )
-                viewModel.createPrestamo(prestamo)
+            if (tipo == TipoPrestamo.MENSUAL) {
+                // Para préstamos mensuales
+                val porcentajeInteres = binding.etPorcentajeInteres.text.toString().toDoubleOrNull()
+                
+                if (validateInputsMensual(montoTotal, porcentajeInteres)) {
+                    val prestamo = Prestamo(
+                        clienteId = "temp_client_id", // This should come from navigation args
+                        clienteNombre = "Cliente Temporal", // This should come from navigation args
+                        tipo = tipo,
+                        fechaInicial = selectedDate.timeInMillis,
+                        montoTotal = montoTotal!!, // Capital inicial
+                        valorCuotaPactada = 0.0, // No aplica para mensuales
+                        numeroCuota = 1,
+                        porcentajeInteres = porcentajeInteres!!,
+                        saldoRestante = montoTotal, // Capital actual = capital inicial
+                        interesesPendientes = 0.0, // Sin intereses pendientes al inicio
+                        ultimaFechaCalculoInteres = selectedDate.timeInMillis
+                    )
+                    viewModel.createPrestamo(prestamo)
+                }
+            } else {
+                // Para préstamos diarios y semanales
+                val valorCuota = binding.etValorCuota.text.toString().toDoubleOrNull()
+                
+                if (validateInputsNormal(montoTotal, valorCuota)) {
+                    val prestamo = Prestamo(
+                        clienteId = "temp_client_id", // This should come from navigation args
+                        clienteNombre = "Cliente Temporal", // This should come from navigation args
+                        tipo = tipo,
+                        fechaInicial = selectedDate.timeInMillis,
+                        montoTotal = montoTotal!!,
+                        valorCuotaPactada = valorCuota!!,
+                        numeroCuota = 1,
+                        porcentajeInteres = 0.0, // No aplica para diarios/semanales
+                        saldoRestante = montoTotal,
+                        interesesPendientes = 0.0,
+                        ultimaFechaCalculoInteres = selectedDate.timeInMillis
+                    )
+                    viewModel.createPrestamo(prestamo)
+                }
             }
         }
         
@@ -138,7 +196,26 @@ class AddPrestamoFragment : Fragment() {
         }
     }
     
-    private fun validateInputs(
+    private fun validateInputsMensual(
+        montoTotal: Double?,
+        porcentajeInteres: Double?
+    ): Boolean {
+        var isValid = true
+        
+        if (montoTotal == null || montoTotal <= 0) {
+            binding.etMontoTotal.error = "El monto debe ser mayor a 0"
+            isValid = false
+        }
+        
+        if (porcentajeInteres == null || porcentajeInteres <= 0) {
+            binding.etPorcentajeInteres.error = "El porcentaje de interés debe ser mayor a 0"
+            isValid = false
+        }
+        
+        return isValid
+    }
+    
+    private fun validateInputsNormal(
         montoTotal: Double?,
         valorCuota: Double?
     ): Boolean {
