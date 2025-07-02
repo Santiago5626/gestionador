@@ -2,6 +2,7 @@ package com.gestionador.ui.loan
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gestionador.data.models.Abono
 import com.gestionador.data.models.Prestamo
 import com.gestionador.data.repository.FirebaseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,6 +46,30 @@ class PrestamosViewModel : ViewModel() {
                 repository.deletePrestamo(prestamoId).let { result ->
                     result.fold(
                         onSuccess = { loadPrestamos() },
+                        onFailure = { e -> _error.value = e.message }
+                    )
+                }
+            } catch (e: Exception) {
+                _error.value = e.message
+            }
+        }
+    }
+    
+    fun realizarAbono(abono: Abono, prestamoActualizado: Prestamo) {
+        viewModelScope.launch {
+            try {
+                // Crear el abono
+                repository.createAbono(abono).let { result ->
+                    result.fold(
+                        onSuccess = {
+                            // Actualizar el préstamo
+                            repository.updatePrestamo(prestamoActualizado).let { updateResult ->
+                                updateResult.fold(
+                                    onSuccess = { loadPrestamos() },
+                                    onFailure = { e -> _error.value = e.message }
+                                )
+                            }
+                        },
                         onFailure = { e -> _error.value = e.message }
                     )
                 }
