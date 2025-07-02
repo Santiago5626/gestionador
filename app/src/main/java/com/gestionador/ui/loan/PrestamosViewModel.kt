@@ -1,4 +1,4 @@
-package com.gestionador.ui.loan
+    package com.gestionador.ui.loan
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -100,4 +100,6 @@ class PrestamosViewModel : ViewModel() {
             }
         }
     }
+    
+    fun obtenerAbonos(prestamoId: String) = repository.getAbonos(prestamoId)
 }
