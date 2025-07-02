@@ -42,6 +42,8 @@ class PrestamosAdapter(
                 }
             }
             
+            // Los botones btnEdit, btnDelete y btnAbono fueron removidos del layout, por lo que se comentan estos listeners
+            /*
             binding.btnEdit.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -62,6 +64,7 @@ class PrestamosAdapter(
                     onAbonoClick(getItem(position))
                 }
             }
+            */
         }
 
         fun bind(prestamo: Prestamo) {
