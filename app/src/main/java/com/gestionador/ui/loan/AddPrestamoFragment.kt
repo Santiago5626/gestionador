@@ -165,6 +165,11 @@ class AddPrestamoFragment : Fragment() {
             clientesViewModel.clientes.collect { clientesList ->
                 clientes = clientesList
                 setupClienteSpinner()
+                
+                // Si estamos en modo edición y ya tenemos el préstamo cargado, seleccionar el cliente
+                currentPrestamo?.let { prestamo ->
+                    selectClienteInSpinner(prestamo.clienteId)
+                }
             }
         }
         
@@ -201,6 +206,11 @@ class AddPrestamoFragment : Fragment() {
                     prestamo?.let {
                         currentPrestamo = it
                         fillPrestamoData(it)
+                        
+                        // Si ya tenemos los clientes cargados, seleccionar el cliente
+                        if (clientes.isNotEmpty()) {
+                            selectClienteInSpinner(it.clienteId)
+                        }
                     }
                 }
             }
@@ -249,6 +259,14 @@ class AddPrestamoFragment : Fragment() {
         )
         clienteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerCliente.adapter = clienteAdapter
+    }
+    
+    private fun selectClienteInSpinner(clienteId: String) {
+        val clienteIndex = clientes.indexOfFirst { it.id == clienteId }
+        if (clienteIndex >= 0) {
+            binding.spinnerCliente.setSelection(clienteIndex + 1) // +1 porque el primer item es "Seleccionar cliente"
+            selectedCliente = clientes[clienteIndex]
+        }
     }
     
     private fun setupClickListeners() {

@@ -8,26 +8,178 @@
     tools:context=".ui.loan.PrestamoDetailFragment">
 
     <TextView
-        android:id="@+id/textViewPrestamoId"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvClienteNombre"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.Gestionador.HeadlineLarge"
+        android:textColor="@color/textPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Préstamo ID: 123456" />
+        tools:text="Juan Pérez" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tvFechaCreacion"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Detalles del préstamo serán implementados próximamente"
-        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
         android:textColor="@color/textSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPrestamoId" />
+        app:layout_constraintTop_toBottomOf="@id/tvClienteNombre"
+        tools:text="Creado el 01/01/2024" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardDetalles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/tvFechaCreacion">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/labelMontoTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Monto Total"
+                android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
+                android:textColor="@color/textSecondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvMontoTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Gestionador.HeadlineMedium"
+                android:textColor="@color/textPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/labelMontoTotal"
+                tools:text="$1,000,000" />
+
+            <TextView
+                android:id="@+id/labelSaldoRestante"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saldo Restante"
+                android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
+                android:textColor="@color/textSecondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvSaldoRestante"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Gestionador.HeadlineMedium"
+                android:textColor="@color/textPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/labelSaldoRestante"
+                tools:text="$800,000" />
+
+            <TextView
+                android:id="@+id/labelTipoPrestamo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Tipo de Préstamo"
+                android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
+                android:textColor="@color/textSecondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvMontoTotal" />
+
+            <TextView
+                android:id="@+id/tvTipoPrestamo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Gestionador.BodyLarge"
+                android:textColor="@color/textPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/labelTipoPrestamo"
+                tools:text="Mensual" />
+
+            <TextView
+                android:id="@+id/labelInteres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Interés"
+                android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
+                android:textColor="@color/textSecondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSaldoRestante" />
+
+            <TextView
+                android:id="@+id/tvInteres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Gestionador.BodyLarge"
+                android:textColor="@color/textPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/labelInteres"
+                tools:text="5% Mensual" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:id="@+id/layoutButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/cardDetalles">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditar"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Editar"
+            app:icon="@drawable/ic_edit" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEliminar"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="Eliminar"
+            android:textColor="@color/error"
+            app:icon="@drawable/ic_delete"
+            app:iconTint="@color/error"
+            app:strokeColor="@color/error" />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAbonar"
+        style="@style/Widget.Gestionador.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Abonar"
+        app:layout_constraintTop_toBottomOf="@id/layoutButtons" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
