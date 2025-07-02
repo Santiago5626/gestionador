@@ -115,10 +115,9 @@ class AddPrestamoFragment : Fragment() {
             
             val montoTotal = binding.etMontoTotal.text.toString().toDoubleOrNull()
             val valorCuota = binding.etValorCuota.text.toString().toDoubleOrNull()
-            val numeroCuotas = binding.etNumeroCuotas.text.toString().toIntOrNull()
             val porcentajeInteres = binding.etPorcentajeInteres.text.toString().toDoubleOrNull() ?: 0.0
             
-            if (validateInputs(montoTotal, valorCuota, numeroCuotas)) {
+            if (validateInputs(montoTotal, valorCuota)) {
                 val prestamo = Prestamo(
                     clienteId = "temp_client_id", // This should come from navigation args
                     clienteNombre = "Cliente Temporal", // This should come from navigation args
@@ -126,7 +125,7 @@ class AddPrestamoFragment : Fragment() {
                     fechaInicial = selectedDate.timeInMillis,
                     montoTotal = montoTotal!!,
                     valorCuotaPactada = valorCuota!!,
-                    numeroCuota = numeroCuotas!!,
+                    numeroCuota = 1, // Siempre inicia en 1
                     porcentajeInteres = porcentajeInteres,
                     saldoRestante = montoTotal
                 )
@@ -141,8 +140,7 @@ class AddPrestamoFragment : Fragment() {
     
     private fun validateInputs(
         montoTotal: Double?,
-        valorCuota: Double?,
-        numeroCuotas: Int?
+        valorCuota: Double?
     ): Boolean {
         var isValid = true
         
@@ -153,11 +151,6 @@ class AddPrestamoFragment : Fragment() {
         
         if (valorCuota == null || valorCuota <= 0) {
             binding.etValorCuota.error = "El valor de cuota debe ser mayor a 0"
-            isValid = false
-        }
-        
-        if (numeroCuotas == null || numeroCuotas <= 0) {
-            binding.etNumeroCuotas.error = "El número de cuotas debe ser mayor a 0"
             isValid = false
         }
         
