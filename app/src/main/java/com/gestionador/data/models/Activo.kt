@@ -5,10 +5,11 @@ data class Activo(
     val fecha: Long = System.currentTimeMillis(),
     val montoIngresado: Double = 0.0,
     val descripcion: String = "",
+    val categoria: CategoriaActivo = CategoriaActivo.INGRESOS,
     val fechaCreacion: Long = System.currentTimeMillis()
 ) {
     // Constructor sin argumentos requerido por Firebase
-    constructor() : this("", 0L, 0.0, "", 0L)
+    constructor() : this("", 0L, 0.0, "", CategoriaActivo.INGRESOS, 0L)
     
     fun getFechaFormateada(): String {
         val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
@@ -24,7 +25,8 @@ data class Activo(
         return mapOf(
             "fecha" to getFechaFormateada(),
             "monto" to montoIngresado,
-            "descripcion" to descripcion
+            "descripcion" to descripcion,
+            "categoria" to categoria.displayName
         )
     }
 }

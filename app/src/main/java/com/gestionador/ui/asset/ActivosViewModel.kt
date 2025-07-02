@@ -8,7 +8,6 @@ import com.gestionador.data.repository.FirebaseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -32,9 +31,10 @@ class ActivosViewModel : ViewModel() {
     private fun calculateTotalBalance(activos: List<Activo>) {
         val total = activos.sumOf { activo ->
             when (activo.categoria) {
-                CategoriaActivo.INGRESO -> activo.montoIngresado
-                CategoriaActivo.GASTO -> -activo.montoIngresado
-                CategoriaActivo.INVERSION -> activo.montoIngresado
+                CategoriaActivo.INGRESOS -> activo.montoIngresado
+                CategoriaActivo.GASTOS -> -activo.montoIngresado
+                CategoriaActivo.INVERSIONES -> activo.montoIngresado
+                CategoriaActivo.OTROS -> activo.montoIngresado
             }
         }
         _totalBalance.value = total

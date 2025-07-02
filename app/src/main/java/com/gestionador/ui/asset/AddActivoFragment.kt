@@ -14,7 +14,6 @@ import com.gestionador.data.models.Activo
 import com.gestionador.data.models.CategoriaActivo
 import com.gestionador.databinding.FragmentAddActivoBinding
 import kotlinx.coroutines.launch
-import java.util.*
 
 class AddActivoFragment : Fragment() {
 
@@ -41,7 +40,7 @@ class AddActivoFragment : Fragment() {
     }
     
     private fun setupSpinner() {
-        val categorias = CategoriaActivo.values().map { it.name }
+        val categorias = CategoriaActivo.values().map { it.displayName }
         val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
@@ -81,7 +80,8 @@ class AddActivoFragment : Fragment() {
         binding.buttonGuardar.setOnClickListener {
             val monto = binding.editTextMonto.text.toString().toDoubleOrNull()
             val descripcion = binding.editTextDescripcion.text.toString()
-            val categoria = CategoriaActivo.valueOf(binding.spinnerCategoria.selectedItem.toString())
+            val selectedIndex = binding.spinnerCategoria.selectedItemPosition
+            val categoria = CategoriaActivo.values()[selectedIndex]
             
             if (validateInputs(monto, descripcion)) {
                 val activo = Activo(
@@ -98,8 +98,8 @@ class AddActivoFragment : Fragment() {
     private fun validateInputs(monto: Double?, descripcion: String): Boolean {
         var isValid = true
         
-        if (monto == null) {
-            binding.editTextMonto.error = "El monto es requerido"
+        if (monto == null || monto <= 0) {
+            binding.editTextMonto.error = "El monto debe ser mayor a 0"
             isValid = false
         }
         

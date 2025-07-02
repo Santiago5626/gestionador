@@ -25,17 +25,21 @@ class AddActivoViewModel : ViewModel() {
     fun createActivo(activo: Activo) {
         viewModelScope.launch {
             _isLoading.value = true
-            _error.value = null
-            
-            repository.addActivo(activo)
-                .onSuccess {
-                    _activoCreated.value = true
+            try {
+                repository.createActivo(activo).let { result ->
+                    result.fold(
+                        onSuccess = { 
+                            _activoCreated.value = true
+                            _error.value = null
+                        },
+                        onFailure = { e -> _error.value = e.message }
+                    )
                 }
-                .onFailure { exception ->
-                    _error.value = exception.message ?: "Error al crear el activo"
-                }
-            
-            _isLoading.value = false
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 }
