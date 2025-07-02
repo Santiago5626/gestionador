@@ -71,7 +71,19 @@
             app:trackCornerRadius="8dp"
             tools:progress="50" />
 
-        <!-- Botones de editar y eliminar -->
+        <!-- Botones de abono, editar y eliminar -->
+        <ImageButton
+            android:id="@+id/btn_abono"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Agregar abono"
+            android:src="@drawable/ic_money"
+            android:tint="@color/colorSuccess"
+            app:layout_constraintEnd_toStartOf="@id/btn_edit"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
             android:id="@+id/btn_edit"
             android:layout_width="48dp"

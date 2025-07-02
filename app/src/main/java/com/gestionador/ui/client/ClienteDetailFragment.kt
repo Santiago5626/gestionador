@@ -93,6 +93,10 @@ class ClienteDetailFragment : Fragment() {
             },
             onDeleteClick = { prestamo ->
                 showDeletePrestamoConfirmationDialog(prestamo.id)
+            },
+            onAbonoClick = { prestamo ->
+                // TODO: Navegar a pantalla de agregar abono
+                Toast.makeText(requireContext(), "Funcionalidad de abono próximamente", Toast.LENGTH_SHORT).show()
             }
         )
         

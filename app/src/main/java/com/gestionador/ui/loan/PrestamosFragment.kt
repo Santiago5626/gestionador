@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +29,7 @@ class PrestamosFragment : Fragment() {
     
     private var allPrestamos: List<Prestamo> = emptyList()
     private var currentFilter: TipoPrestamo? = null
+    private var searchQuery: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +47,7 @@ class PrestamosFragment : Fragment() {
         setupObservers()
         setupClickListeners()
         setupFilterChips()
+        setupSearch()
         
         viewModel.loadPrestamos()
     }
@@ -66,6 +69,10 @@ class PrestamosFragment : Fragment() {
             },
             onDeleteClick = { prestamo ->
                 showDeleteConfirmationDialog(prestamo)
+            },
+            onAbonoClick = { prestamo ->
+                // TODO: Navegar a pantalla de agregar abono
+                Toast.makeText(requireContext(), "Funcionalidad de abono próximamente", Toast.LENGTH_SHORT).show()
             }
         )
         
@@ -144,11 +151,26 @@ class PrestamosFragment : Fragment() {
         selectedChip.isChecked = true
     }
     
+    private fun setupSearch() {
+        binding.etSearch.addTextChangedListener { text ->
+            searchQuery = text.toString().trim()
+            applyCurrentFilter()
+        }
+    }
+    
     private fun applyCurrentFilter() {
-        val filteredPrestamos = if (currentFilter == null) {
-            allPrestamos
-        } else {
-            allPrestamos.filter { it.tipo == currentFilter }
+        var filteredPrestamos = allPrestamos
+        
+        // Aplicar filtro por tipo
+        if (currentFilter != null) {
+            filteredPrestamos = filteredPrestamos.filter { it.tipo == currentFilter }
+        }
+        
+        // Aplicar filtro de búsqueda por nombre de cliente
+        if (searchQuery.isNotEmpty()) {
+            filteredPrestamos = filteredPrestamos.filter { prestamo ->
+                prestamo.clienteNombre.contains(searchQuery, ignoreCase = true)
+            }
         }
         
         adapter.submitList(filteredPrestamos)

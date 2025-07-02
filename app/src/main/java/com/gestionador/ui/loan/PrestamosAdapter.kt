@@ -12,7 +12,8 @@ import com.gestionador.databinding.ItemPrestamoBinding
 class PrestamosAdapter(
     private val onItemClick: (Prestamo) -> Unit,
     private val onEditClick: (Prestamo) -> Unit,
-    private val onDeleteClick: (Prestamo) -> Unit
+    private val onDeleteClick: (Prestamo) -> Unit,
+    private val onAbonoClick: (Prestamo) -> Unit
 ) : ListAdapter<Prestamo, PrestamosAdapter.PrestamoViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrestamoViewHolder {
@@ -52,6 +53,13 @@ class PrestamosAdapter(
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onDeleteClick(getItem(position))
+                }
+            }
+            
+            binding.btnAbono.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onAbonoClick(getItem(position))
                 }
             }
         }
