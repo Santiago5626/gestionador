@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gestionador.R
 import com.gestionador.data.models.Prestamo
+import com.gestionador.data.models.TipoPrestamo
 import com.gestionador.databinding.FragmentPrestamosBinding
 import kotlinx.coroutines.launch
 
@@ -24,6 +25,9 @@ class PrestamosFragment : Fragment() {
     
     private val viewModel: PrestamosViewModel by viewModels()
     private lateinit var adapter: PrestamosAdapter
+    
+    private var allPrestamos: List<Prestamo> = emptyList()
+    private var currentFilter: TipoPrestamo? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +44,7 @@ class PrestamosFragment : Fragment() {
         setupRecyclerView()
         setupObservers()
         setupClickListeners()
+        setupFilterChips()
         
         viewModel.loadPrestamos()
     }
@@ -73,8 +78,8 @@ class PrestamosFragment : Fragment() {
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.prestamos.collect { prestamos ->
-                adapter.submitList(prestamos)
-                binding.tvEmpty.visibility = if (prestamos.isEmpty()) View.VISIBLE else View.GONE
+                allPrestamos = prestamos
+                applyCurrentFilter()
             }
         }
         
@@ -97,6 +102,57 @@ class PrestamosFragment : Fragment() {
         binding.fabAdd.setOnClickListener {
             findNavController().navigate(R.id.action_prestamosFragment_to_addPrestamoFragment)
         }
+    }
+    
+    private fun setupFilterChips() {
+        // Configurar chip "Todos" como seleccionado por defecto
+        binding.chipTodos.isChecked = true
+        
+        binding.chipTodos.setOnClickListener {
+            selectChip(binding.chipTodos)
+            currentFilter = null
+            applyCurrentFilter()
+        }
+        
+        binding.chipDiarios.setOnClickListener {
+            selectChip(binding.chipDiarios)
+            currentFilter = TipoPrestamo.DIARIO
+            applyCurrentFilter()
+        }
+        
+        binding.chipSemanales.setOnClickListener {
+            selectChip(binding.chipSemanales)
+            currentFilter = TipoPrestamo.SEMANAL
+            applyCurrentFilter()
+        }
+        
+        binding.chipMensuales.setOnClickListener {
+            selectChip(binding.chipMensuales)
+            currentFilter = TipoPrestamo.MENSUAL
+            applyCurrentFilter()
+        }
+    }
+    
+    private fun selectChip(selectedChip: com.google.android.material.chip.Chip) {
+        // Deseleccionar todos los chips
+        binding.chipTodos.isChecked = false
+        binding.chipDiarios.isChecked = false
+        binding.chipSemanales.isChecked = false
+        binding.chipMensuales.isChecked = false
+        
+        // Seleccionar el chip clickeado
+        selectedChip.isChecked = true
+    }
+    
+    private fun applyCurrentFilter() {
+        val filteredPrestamos = if (currentFilter == null) {
+            allPrestamos
+        } else {
+            allPrestamos.filter { it.tipo == currentFilter }
+        }
+        
+        adapter.submitList(filteredPrestamos)
+        binding.tvEmpty.visibility = if (filteredPrestamos.isEmpty()) View.VISIBLE else View.GONE
     }
     
     private fun showDeleteConfirmationDialog(prestamo: Prestamo) {
