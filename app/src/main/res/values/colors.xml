@@ -1,21 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2196F3</color>
-    <color name="colorPrimaryDark">#1976D2</color>
-    <color name="colorAccent">#FF4081</color>
+    <!-- Paleta principal morado profesional -->
+    <color name="colorPrimary">#9B5DE5</color>
+    <color name="colorPrimaryDark">#7F3FBF</color>
+    <color name="colorAccent">#B794F6</color>
     
-    <!-- Additional colors for the app -->
+    <!-- Fondos -->
+    <color name="backgroundColor">#1F1B2E</color>
+    <color name="backgroundSecondary">#2C1A47</color>
+    <color name="surfaceColor">#2D2438</color>
+    <color name="surfaceVariant">#3A2F4A</color>
+    
+    <!-- Textos -->
+    <color name="textPrimary">#FFFFFF</color>
+    <color name="textSecondary">#CCCCCC</color>
+    <color name="textHint">#999999</color>
+    
+    <!-- Estados -->
     <color name="colorSuccess">#4CAF50</color>
     <color name="colorWarning">#FF9800</color>
     <color name="colorError">#F44336</color>
     <color name="colorInfo">#2196F3</color>
     
-    <!-- Background colors -->
-    <color name="backgroundColor">#FAFAFA</color>
-    <color name="cardBackground">#FFFFFF</color>
+    <!-- Tipos de préstamo -->
+    <color name="prestamoDiario">#2196F3</color>
+    <color name="prestamoSemanal">#4CAF50</color>
+    <color name="prestamoMensual">#9B5DE5</color>
     
-    <!-- Text colors -->
-    <color name="textPrimary">#212121</color>
-    <color name="textSecondary">#757575</color>
-    <color name="textHint">#BDBDBD</color>
+    <!-- Material Design 3 compatibilidad -->
+    <color name="md_theme_primary">#9B5DE5</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#7F3FBF</color>
+    <color name="md_theme_onPrimaryContainer">#FFFFFF</color>
+    <color name="md_theme_secondary">#B794F6</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#3A2F4A</color>
+    <color name="md_theme_onSecondaryContainer">#CCCCCC</color>
+    <color name="md_theme_background">#1F1B2E</color>
+    <color name="md_theme_onBackground">#FFFFFF</color>
+    <color name="md_theme_surface">#2D2438</color>
+    <color name="md_theme_onSurface">#FFFFFF</color>
 </resources>

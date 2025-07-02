@@ -2,11 +2,11 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Gestion.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,73 +14,75 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/textViewTipo"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_cliente_nombre"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_chip"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="4dp"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"
-            android:textStyle="bold"
+            android:layout_marginEnd="8dp"
+            android:textAppearance="@style/TextAppearance.Gestion.BodyLarge"
+            app:layout_constraintEnd_toStartOf="@id/chip_tipo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="DIARIO" />
+            tools:text="Juan Pérez" />
 
-        <TextView
-            android:id="@+id/textViewEstado"
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_tipo"
+            style="@style/Widget.Gestion.Chip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="ACTIVO" />
+            tools:text="Diario" />
 
         <TextView
-            android:id="@+id/textViewFecha"
+            android:id="@+id/tv_monto_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"
+            android:textAppearance="@style/TextAppearance.Gestion.BodyLarge"
+            android:textColor="@color/md_theme_primary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTipo"
-            tools:text="15/12/2023" />
+            app:layout_constraintTop_toBottomOf="@id/tv_cliente_nombre"
+            tools:text="$500.00" />
 
         <TextView
-            android:id="@+id/textViewMonto"
+            android:id="@+id/tv_saldo_restante"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_monto_total"
+            tools:text="Restante: $300.00" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_bar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:progress="50"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewFecha"
-            tools:text="$500.000" />
+            app:layout_constraintTop_toBottomOf="@id/tv_monto_total"
+            app:trackCornerRadius="8dp"
+            app:trackThickness="8dp" />
 
         <TextView
-            android:id="@+id/textViewSaldo"
+            android:id="@+id/tv_cuota"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            android:textColor="@android:color/holo_red_dark"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewMonto"
-            tools:text="Saldo: $350.000" />
+            app:layout_constraintTop_toBottomOf="@id/progress_bar"
+            tools:text="Cuota: $50.00" />
 
         <TextView
-            android:id="@+id/textViewCuota"
+            android:id="@+id/tv_estado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSaldo"
-            tools:text="Cuota: $25.000" />
+            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_cuota"
+            tools:text="Activo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

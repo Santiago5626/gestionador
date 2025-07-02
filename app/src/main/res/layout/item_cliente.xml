@@ -2,56 +2,89 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Gestion.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Avatar circular con iniciales -->
         <TextView
-            android:id="@+id/textViewNombre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:id="@+id/tv_avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_chip"
+            android:backgroundTint="@color/md_theme_primary"
+            android:gravity="center"
+            android:text="JP"
+            android:textAppearance="@style/TextAppearance.Gestion.BodyLarge"
+            android:textColor="@color/textPrimary"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="JP" />
+
+        <TextView
+            android:id="@+id/tv_nombre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:textAppearance="@style/TextAppearance.Gestion.BodyLarge"
+            android:textColor="@color/textPrimary"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_avatar"
+            app:layout_constraintTop_toTopOf="@id/tv_avatar"
             tools:text="Juan Pérez" />
 
         <TextView
-            android:id="@+id/textViewCedula"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_cedula"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"
-            tools:text="Cédula: 12345678" />
+            android:layout_marginEnd="8dp"
+            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
+            android:textColor="@color/textSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_avatar"
+            app:layout_constraintTop_toBottomOf="@id/tv_nombre"
+            tools:text="CC: 12345678" />
 
         <TextView
-            android:id="@+id/textViewTelefono"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_telefono"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"
-            tools:text="Tel: 3001234567" />
+            android:layout_marginEnd="8dp"
+            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
+            android:textColor="@color/textSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_avatar"
+            app:layout_constraintTop_toBottomOf="@id/tv_cedula"
+            tools:text="📞 300 123 4567" />
 
         <TextView
-            android:id="@+id/textViewDireccion"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_direccion"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"
-            android:maxLines="2"
-            android:ellipsize="end"
-            tools:text="Calle 123 #45-67, Barrio Centro" />
+            android:layout_marginEnd="8dp"
+            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
+            android:textColor="@color/textSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_avatar"
+            app:layout_constraintTop_toBottomOf="@id/tv_telefono"
+            tools:text="📍 Calle 123 #45-67" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

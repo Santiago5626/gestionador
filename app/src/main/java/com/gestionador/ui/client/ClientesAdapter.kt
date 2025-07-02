@@ -31,10 +31,14 @@ class ClientesAdapter(
 
         fun bind(cliente: Cliente) {
             binding.apply {
-                textViewNombre.text = cliente.nombre
-                textViewCedula.text = "Cédula: ${cliente.cedula}"
-                textViewTelefono.text = "Tel: ${cliente.telefono}"
-                textViewDireccion.text = cliente.direccion
+                tvNombre.text = cliente.getNombreCompleto()
+                tvCedula.text = "CC: ${cliente.cedula}"
+                tvTelefono.text = "📞 ${cliente.telefono}"
+                tvDireccion.text = "📍 ${cliente.direccion}"
+                
+                // Generar iniciales para el avatar
+                val iniciales = "${cliente.nombre.firstOrNull()?.uppercase() ?: ""}${cliente.apellido.firstOrNull()?.uppercase() ?: ""}"
+                tvAvatar.text = iniciales
 
                 root.setOnClickListener {
                     onClienteClick(cliente)

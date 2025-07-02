@@ -2,64 +2,85 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Gestion.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipCategoria"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"
-            app:chipBackgroundColor="@color/colorPrimary"
+        <!-- Línea de tiempo vertical -->
+        <View
+            android:id="@+id/timeline_line"
+            android:layout_width="2dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:background="@color/md_theme_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="INGRESO" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Círculo de la línea de tiempo -->
+        <View
+            android:id="@+id/timeline_circle"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/timeline_circle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_fecha" />
+
+        <!-- Icono de dinero -->
+        <ImageView
+            android:id="@+id/iv_money_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_money"
+            android:tint="@color/colorSuccess"
+            app:layout_constraintStart_toEndOf="@id/timeline_line"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textViewFecha"
+            android:id="@+id/tv_fecha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:layout_marginStart="12dp"
+            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
             android:textColor="@color/textSecondary"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_money_icon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="15/12/2023" />
 
         <TextView
-            android:id="@+id/textViewMonto"
+            android:id="@+id/tv_monto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="20sp"
+            android:textAppearance="@style/TextAppearance.Gestion.BodyLarge"
+            android:textColor="@color/colorSuccess"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chipCategoria"
-            tools:text="$500.000"
-            tools:textColor="@color/colorSuccess" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="+$500.00" />
 
         <TextView
-            android:id="@+id/textViewDescripcion"
+            android:id="@+id/tv_descripcion"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
-            android:textSize="14sp"
+            android:textAppearance="@style/TextAppearance.Gestion.BodyMedium"
             android:textColor="@color/textPrimary"
-            android:maxLines="2"
-            android:ellipsize="end"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewMonto"
-            tools:text="Pago de cliente por préstamo mensual" />
+            app:layout_constraintEnd_toStartOf="@id/tv_monto"
+            app:layout_constraintStart_toEndOf="@id/iv_money_icon"
+            app:layout_constraintTop_toBottomOf="@id/tv_fecha"
+            tools:text="Pago de intereses del préstamo de Juan Pérez" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

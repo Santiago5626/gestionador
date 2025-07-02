@@ -1,23 +1,24 @@
 package com.gestionador.ui.loan
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.gestionador.R
 import com.gestionador.data.models.Prestamo
 import com.gestionador.data.models.TipoPrestamo
 import com.gestionador.data.models.EstadoPrestamo
 import com.gestionador.databinding.ItemPrestamoBinding
 import java.text.NumberFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 class PrestamosAdapter(
     private val onPrestamoClick: (Prestamo) -> Unit
 ) : ListAdapter<Prestamo, PrestamosAdapter.PrestamoViewHolder>(PrestamoDiffCallback()) {
 
-    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val currencyFormat = NumberFormat.getCurrencyInstance(Locale("es", "CO"))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrestamoViewHolder {
@@ -39,25 +40,34 @@ class PrestamosAdapter(
 
         fun bind(prestamo: Prestamo) {
             binding.apply {
-                textViewTipo.text = when (prestamo.tipo) {
-                    TipoPrestamo.DIARIO -> "Diario"
-                    TipoPrestamo.SEMANAL -> "Semanal"
-                    TipoPrestamo.MENSUAL -> "Mensual"
+                tvClienteNombre.text = prestamo.clienteNombre
+                tvMontoTotal.text = currencyFormat.format(prestamo.montoTotal)
+                tvSaldoRestante.text = "Restante: ${currencyFormat.format(prestamo.saldoRestante)}"
+                tvCuota.text = "Cuota: ${currencyFormat.format(prestamo.valorCuotaPactada)}"
+                tvEstado.text = prestamo.getEstadoString()
+
+                // Configurar chip de tipo de préstamo
+                chipTipo.text = prestamo.getTipoString()
+                val chipColor = when (prestamo.tipo) {
+                    TipoPrestamo.DIARIO -> R.color.prestamoDiario
+                    TipoPrestamo.SEMANAL -> R.color.prestamoSemanal
+                    TipoPrestamo.MENSUAL -> R.color.prestamoMensual
                 }
-                
-                textViewFecha.text = dateFormat.format(Date(prestamo.fechaInicial))
-                textViewMonto.text = currencyFormat.format(prestamo.montoTotal)
-                textViewSaldo.text = "Saldo: ${currencyFormat.format(prestamo.saldoRestante)}"
-                textViewCuota.text = "Cuota: ${currencyFormat.format(prestamo.valorCuotaPactada)}"
-                
-                // Set estado color
+                chipTipo.setChipBackgroundColorResource(chipColor)
+
+                // Configurar barra de progreso
+                val progreso = ((prestamo.montoTotal - prestamo.saldoRestante) / prestamo.montoTotal * 100).toInt()
+                progressBar.progress = progreso
+                progressBar.setIndicatorColor(ContextCompat.getColor(root.context, chipColor))
+                progressBar.trackColor = ContextCompat.getColor(root.context, R.color.surfaceVariant)
+
+                // Configurar color del estado
                 val estadoColor = when (prestamo.estado) {
-                    EstadoPrestamo.ACTIVO -> android.R.color.holo_green_dark
-                    EstadoPrestamo.PAGADO -> android.R.color.holo_blue_dark
-                    EstadoPrestamo.VENCIDO -> android.R.color.holo_red_dark
+                    EstadoPrestamo.ACTIVO -> R.color.colorSuccess
+                    EstadoPrestamo.PAGADO -> R.color.colorInfo
+                    EstadoPrestamo.VENCIDO -> R.color.colorError
                 }
-                textViewEstado.setTextColor(root.context.getColor(estadoColor))
-                textViewEstado.text = prestamo.estado.name
+                tvEstado.setTextColor(ContextCompat.getColor(root.context, estadoColor))
 
                 root.setOnClickListener {
                     onPrestamoClick(prestamo)

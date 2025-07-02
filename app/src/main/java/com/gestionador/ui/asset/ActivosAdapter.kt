@@ -2,13 +2,10 @@ package com.gestionador.ui.asset
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.gestionador.R
 import com.gestionador.data.models.Activo
-import com.gestionador.data.models.CategoriaActivo
 import com.gestionador.databinding.ItemActivoBinding
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -29,40 +26,23 @@ class ActivosAdapter : ListAdapter<Activo, ActivosAdapter.ActivoViewHolder>(Acti
     }
 
     override fun onBindViewHolder(holder: ActivoViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position == itemCount - 1)
     }
 
     inner class ActivoViewHolder(
         private val binding: ItemActivoBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(activo: Activo) {
+        fun bind(activo: Activo, isLast: Boolean) {
             binding.apply {
-                textViewFecha.text = dateFormat.format(Date(activo.fecha))
-                textViewMonto.text = currencyFormat.format(activo.montoIngresado)
-                textViewDescripcion.text = activo.descripcion
+                tvFecha.text = dateFormat.format(Date(activo.fecha))
+                tvMonto.text = "+${currencyFormat.format(activo.montoIngresado)}"
+                tvDescripcion.text = activo.descripcion
                 
-                // Set categoria chip and color
-                val (chipText, chipColor) = when (activo.categoria) {
-                    CategoriaActivo.INGRESO -> Pair("INGRESO", R.color.colorSuccess)
-                    CategoriaActivo.GASTO -> Pair("GASTO", R.color.colorError)
-                    CategoriaActivo.INVERSION -> Pair("INVERSIÓN", R.color.colorInfo)
+                // Ocultar la línea de tiempo en el último elemento
+                if (isLast) {
+                    timelineLine.visibility = android.view.View.INVISIBLE
                 }
-                
-                chipCategoria.text = chipText
-                chipCategoria.setChipBackgroundColorResource(chipColor)
-                
-                // Set monto color based on categoria
-                textViewMonto.setTextColor(
-                    ContextCompat.getColor(
-                        root.context,
-                        when (activo.categoria) {
-                            CategoriaActivo.INGRESO -> R.color.colorSuccess
-                            CategoriaActivo.GASTO -> R.color.colorError
-                            CategoriaActivo.INVERSION -> R.color.colorInfo
-                        }
-                    )
-                )
             }
         }
     }
