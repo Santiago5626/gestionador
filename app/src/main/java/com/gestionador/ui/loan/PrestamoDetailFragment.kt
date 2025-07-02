@@ -104,6 +104,9 @@ class PrestamoDetailFragment : Fragment() {
             currentPrestamo?.let { prestamo ->
                 val bundle = Bundle().apply {
                     putString("prestamoId", prestamo.id)
+                    putString("clienteNombre", prestamo.clienteNombre)
+                    putDouble("montoTotal", prestamo.montoTotal)
+                    putLong("fechaInicial", prestamo.fechaInicial)
                 }
                 // Cambiar la acción de navegación a la acción correcta definida en nav_graph.xml
                 findNavController().navigate(R.id.action_prestamoDetailFragment_to_prestamoCartonFragment, bundle)

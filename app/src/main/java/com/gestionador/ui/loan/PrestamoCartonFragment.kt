@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.gestionador.ui.loan.PrestamoCartonFragmentArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gestionador.databinding.FragmentPrestamoCartonBinding
 import kotlinx.coroutines.launch
@@ -49,15 +48,32 @@ class PrestamoCartonFragment : Fragment() {
 
     private fun loadCartonData() {
         val prestamoId = arguments?.getString("prestamoId")
-        if (prestamoId == null) {
-            Toast.makeText(requireContext(), "ID de préstamo no proporcionado", Toast.LENGTH_SHORT).show()
+        val clienteNombre = arguments?.getString("clienteNombre")
+        val montoTotal = arguments?.getDouble("montoTotal") ?: 0.0
+        val fechaInicial = arguments?.getLong("fechaInicial") ?: 0L
+
+        if (prestamoId == null || clienteNombre == null || fechaInicial == 0L) {
+            Toast.makeText(requireContext(), "Datos de préstamo incompletos", Toast.LENGTH_SHORT).show()
             findNavController().navigateUp()
             return
         }
 
         lifecycleScope.launch {
             viewModel.obtenerAbonos(prestamoId).collect { abonos ->
-                adapter.submitList(abonos)
+                if (abonos.isEmpty()) {
+                    // Crear un abono inicial con datos del préstamo para mostrar en la tabla
+                    val abonoInicial = com.gestionador.data.models.Abono(
+                        id = "inicial",
+                        prestamoId = prestamoId,
+                        numeroCuota = 1,
+                        fechaAbono = fechaInicial,
+                        montoAbonado = montoTotal,
+                        saldoRestante = montoTotal
+                    )
+                    adapter.submitList(listOf(abonoInicial))
+                } else {
+                    adapter.submitList(abonos)
+                }
             }
         }
     }
