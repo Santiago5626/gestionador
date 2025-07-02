@@ -40,7 +40,7 @@ class AddClienteFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.isLoading.collect { isLoading ->
                 binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-                binding.buttonGuardar.isEnabled = !isLoading
+                binding.btnGuardar.isEnabled = !isLoading
             }
         }
         
@@ -63,49 +63,55 @@ class AddClienteFragment : Fragment() {
     }
     
     private fun setupClickListeners() {
-        binding.buttonGuardar.setOnClickListener {
-            val cedula = binding.editTextCedula.text.toString()
-            val nombre = binding.editTextNombre.text.toString()
-            val direccion = binding.editTextDireccion.text.toString()
-            val telefono = binding.editTextTelefono.text.toString()
+        binding.btnGuardar.setOnClickListener {
+            val cedula = binding.etCedula.text.toString()
+            val nombre = binding.etNombre.text.toString()
+            val apellido = binding.etApellido.text.toString()
+            val direccion = binding.etDireccion.text.toString()
+            val telefono = binding.etTelefono.text.toString()
             
-            if (validateInputs(cedula, nombre, direccion, telefono)) {
+            if (validateInputs(cedula, nombre, apellido, direccion, telefono)) {
                 val cliente = Cliente(
                     cedula = cedula,
                     nombre = nombre,
+                    apellido = apellido,
                     direccion = direccion,
                     telefono = telefono
                 )
                 viewModel.createCliente(cliente)
             }
         }
+        
+        binding.btnCancelar.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
     
-    private fun validateInputs(
-        cedula: String,
-        nombre: String,
-        direccion: String,
-        telefono: String
-    ): Boolean {
+    private fun validateInputs(cedula: String, nombre: String, apellido: String, direccion: String, telefono: String): Boolean {
         var isValid = true
         
         if (cedula.isBlank()) {
-            binding.editTextCedula.error = "La cédula es requerida"
+            binding.etCedula.error = "La cédula es requerida"
             isValid = false
         }
         
         if (nombre.isBlank()) {
-            binding.editTextNombre.error = "El nombre es requerido"
+            binding.etNombre.error = "El nombre es requerido"
+            isValid = false
+        }
+        
+        if (apellido.isBlank()) {
+            binding.etApellido.error = "El apellido es requerido"
             isValid = false
         }
         
         if (direccion.isBlank()) {
-            binding.editTextDireccion.error = "La dirección es requerida"
+            binding.etDireccion.error = "La dirección es requerida"
             isValid = false
         }
         
         if (telefono.isBlank()) {
-            binding.editTextTelefono.error = "El teléfono es requerido"
+            binding.etTelefono.error = "El teléfono es requerido"
             isValid = false
         }
         

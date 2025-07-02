@@ -4,23 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gestionador.R
 import com.gestionador.databinding.FragmentPrestamosBinding
 import kotlinx.coroutines.launch
 
 class PrestamosFragment : Fragment() {
-    
+
     private var _binding: FragmentPrestamosBinding? = null
     private val binding get() = _binding!!
     
     private val viewModel: PrestamosViewModel by viewModels()
-    private lateinit var prestamosAdapter: PrestamosAdapter
+    private lateinit var adapter: PrestamosAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,19 +36,16 @@ class PrestamosFragment : Fragment() {
         setupObservers()
         setupClickListeners()
         
-        // Load prestamos
         viewModel.loadPrestamos()
     }
     
     private fun setupRecyclerView() {
-        prestamosAdapter = PrestamosAdapter { prestamo ->
+        adapter = PrestamosAdapter { prestamo ->
             // Navigate to prestamo detail
-            val bundle = bundleOf("prestamoId" to prestamo.id)
-            findNavController().navigate(R.id.action_prestamosFragment_to_prestamoDetailFragment, bundle)
         }
         
-        binding.recyclerViewPrestamos.apply {
-            adapter = prestamosAdapter
+        binding.rvPrestamos.apply {
+            adapter = this@PrestamosFragment.adapter
             layoutManager = LinearLayoutManager(requireContext())
         }
     }
@@ -58,8 +53,8 @@ class PrestamosFragment : Fragment() {
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.prestamos.collect { prestamos ->
-                prestamosAdapter.submitList(prestamos)
-                binding.emptyView.visibility = if (prestamos.isEmpty()) View.VISIBLE else View.GONE
+                adapter.submitList(prestamos)
+                binding.tvEmpty.visibility = if (prestamos.isEmpty()) View.VISIBLE else View.GONE
             }
         }
         
@@ -71,8 +66,8 @@ class PrestamosFragment : Fragment() {
     }
     
     private fun setupClickListeners() {
-        binding.fabAddPrestamo.setOnClickListener {
-            findNavController().navigate(R.id.action_prestamosFragment_to_addPrestamoFragment)
+        binding.fabAdd.setOnClickListener {
+            // Navigate to add prestamo
         }
     }
 

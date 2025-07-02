@@ -25,17 +25,22 @@ class AddClienteViewModel : ViewModel() {
     fun createCliente(cliente: Cliente) {
         viewModelScope.launch {
             _isLoading.value = true
-            _error.value = null
-            
-            repository.addCliente(cliente)
-                .onSuccess {
-                    _clienteCreated.value = true
-                }
-                .onFailure { exception ->
-                    _error.value = exception.message ?: "Error al crear el cliente"
-                }
-            
-            _isLoading.value = false
+            try {
+                val result = repository.addCliente(cliente)
+                result.fold(
+                    onSuccess = {
+                        _clienteCreated.value = true
+                        _error.value = null
+                    },
+                    onFailure = { e ->
+                        _error.value = e.message
+                    }
+                )
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 }
