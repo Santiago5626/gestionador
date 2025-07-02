@@ -84,6 +84,9 @@
         <action
             android:id="@+id/action_prestamoDetailFragment_to_addPrestamoFragment"
             app:destination="@id/addPrestamoFragment" />
+        <action
+            android:id="@+id/action_prestamoDetailFragment_to_prestamoCartonFragment"
+            app:destination="@id/prestamoCartonFragment" />
     </fragment>
 
     <!-- Activos Navigation -->
