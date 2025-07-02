@@ -145,4 +145,17 @@ class FirebaseRepository {
             Result.failure(e)
         }
     }
+
+    // Métodos adicionales para compatibilidad con ViewModels
+    suspend fun addCliente(cliente: Cliente): Result<String> = guardarCliente(cliente)
+    suspend fun getClientes(): Flow<List<Cliente>> = obtenerClientes()
+    suspend fun deleteCliente(clienteId: String): Result<Unit> = eliminarCliente(clienteId)
+
+    suspend fun addPrestamo(prestamo: Prestamo): Result<String> = guardarPrestamo(prestamo)
+    suspend fun getPrestamos(clienteId: String? = null): Flow<List<Prestamo>> = obtenerPrestamos(clienteId)
+    suspend fun deletePrestamo(prestamoId: String): Result<Unit> = eliminarPrestamo(prestamoId)
+
+    suspend fun addActivo(activo: Activo): Result<String> = guardarActivo(activo)
+    suspend fun getActivos(): Flow<List<Activo>> = obtenerActivos()
+    suspend fun deleteActivo(activoId: String): Result<Unit> = eliminarActivo(activoId)
 }
