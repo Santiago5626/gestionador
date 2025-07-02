@@ -28,11 +28,16 @@ class AddPrestamoFragment : Fragment() {
     
     private val viewModel: AddPrestamoViewModel by viewModels()
     private val clientesViewModel: ClientesViewModel by viewModels()
+    private val prestamosViewModel: PrestamosViewModel by viewModels()
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private var selectedDate = Calendar.getInstance()
     
     private var clientes: List<Cliente> = emptyList()
     private var selectedCliente: Cliente? = null
+    
+    private var prestamoId: String? = null
+    private var isEdit: Boolean = false
+    private var currentPrestamo: Prestamo? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +51,11 @@ class AddPrestamoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
+        // Obtener argumentos
+        prestamoId = arguments?.getString("prestamoId")
+        isEdit = arguments?.getBoolean("isEdit", false) ?: false
+        
+        setupUI()
         setupSpinners()
         setupDatePicker()
         setupObservers()
@@ -54,6 +64,20 @@ class AddPrestamoFragment : Fragment() {
         
         // Cargar clientes
         clientesViewModel.loadClientes()
+        
+        if (isEdit && prestamoId != null) {
+            loadPrestamoData()
+        }
+    }
+    
+    private fun setupUI() {
+        // Cambiar título según el modo
+        binding.tvTitle.text = if (isEdit) "Editar Préstamo" else "Agregar Préstamo"
+        binding.btnGuardar.text = if (isEdit) "Actualizar" else "Guardar"
+    }
+    
+    private fun loadPrestamoData() {
+        prestamosViewModel.loadPrestamos()
     }
     
     private fun setupSpinners() {
@@ -162,10 +186,55 @@ class AddPrestamoFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.prestamoCreated.collect { created ->
                 if (created) {
-                    Toast.makeText(requireContext(), "Préstamo guardado exitosamente", Toast.LENGTH_SHORT).show()
+                    val message = if (isEdit) "Préstamo actualizado exitosamente" else "Préstamo guardado exitosamente"
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                     findNavController().navigateUp()
                 }
             }
+        }
+        
+        // Observer para cargar datos del préstamo en modo edición
+        if (isEdit) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                prestamosViewModel.prestamos.collect { prestamos ->
+                    val prestamo = prestamos.find { it.id == prestamoId }
+                    prestamo?.let {
+                        currentPrestamo = it
+                        fillPrestamoData(it)
+                    }
+                }
+            }
+        }
+    }
+    
+    private fun fillPrestamoData(prestamo: Prestamo) {
+        // Llenar campos básicos
+        binding.etMontoTotal.setText(prestamo.montoTotal.toString())
+        
+        // Configurar fecha
+        selectedDate.timeInMillis = prestamo.fechaInicial
+        binding.etFechaInicio.setText(dateFormat.format(selectedDate.time))
+        
+        // Configurar tipo de préstamo
+        val tipoIndex = when (prestamo.tipo) {
+            TipoPrestamo.DIARIO -> 0
+            TipoPrestamo.SEMANAL -> 1
+            TipoPrestamo.MENSUAL -> 2
+        }
+        binding.spinnerTipo.setSelection(tipoIndex)
+        
+        // Configurar campos específicos según el tipo
+        if (prestamo.tipo == TipoPrestamo.MENSUAL) {
+            binding.etPorcentajeInteres.setText(prestamo.porcentajeInteres.toString())
+        } else {
+            binding.etValorCuota.setText(prestamo.valorCuotaPactada.toString())
+        }
+        
+        // Seleccionar cliente
+        val clienteIndex = clientes.indexOfFirst { it.id == prestamo.clienteId }
+        if (clienteIndex >= 0) {
+            binding.spinnerCliente.setSelection(clienteIndex + 1) // +1 porque el primer item es "Seleccionar cliente"
+            selectedCliente = clientes[clienteIndex]
         }
     }
     
@@ -204,19 +273,33 @@ class AddPrestamoFragment : Fragment() {
                 val porcentajeInteres = binding.etPorcentajeInteres.text.toString().toDoubleOrNull()
                 
                 if (validateInputsMensual(montoTotal, porcentajeInteres)) {
-                    val prestamo = Prestamo(
-                        clienteId = selectedCliente!!.id,
-                        clienteNombre = selectedCliente!!.getNombreCompleto(),
-                        tipo = tipo,
-                        fechaInicial = selectedDate.timeInMillis,
-                        montoTotal = montoTotal!!, // Capital inicial
-                        valorCuotaPactada = 0.0, // No aplica para mensuales
-                        numeroCuota = 1,
-                        porcentajeInteres = porcentajeInteres!!,
-                        saldoRestante = montoTotal, // Capital actual = capital inicial
-                        interesesPendientes = 0.0, // Sin intereses pendientes al inicio
-                        ultimaFechaCalculoInteres = selectedDate.timeInMillis
-                    )
+                    val prestamo = if (isEdit && currentPrestamo != null) {
+                        // Actualizar préstamo existente
+                        currentPrestamo!!.copy(
+                            clienteId = selectedCliente!!.id,
+                            clienteNombre = selectedCliente!!.getNombreCompleto(),
+                            tipo = tipo,
+                            fechaInicial = selectedDate.timeInMillis,
+                            montoTotal = montoTotal!!,
+                            valorCuotaPactada = 0.0,
+                            porcentajeInteres = porcentajeInteres!!
+                        )
+                    } else {
+                        // Crear nuevo préstamo
+                        Prestamo(
+                            clienteId = selectedCliente!!.id,
+                            clienteNombre = selectedCliente!!.getNombreCompleto(),
+                            tipo = tipo,
+                            fechaInicial = selectedDate.timeInMillis,
+                            montoTotal = montoTotal!!, // Capital inicial
+                            valorCuotaPactada = 0.0, // No aplica para mensuales
+                            numeroCuota = 1,
+                            porcentajeInteres = porcentajeInteres!!,
+                            saldoRestante = montoTotal, // Capital actual = capital inicial
+                            interesesPendientes = 0.0, // Sin intereses pendientes al inicio
+                            ultimaFechaCalculoInteres = selectedDate.timeInMillis
+                        )
+                    }
                     viewModel.createPrestamo(prestamo)
                 }
             } else {
@@ -224,19 +307,33 @@ class AddPrestamoFragment : Fragment() {
                 val valorCuota = binding.etValorCuota.text.toString().toDoubleOrNull()
                 
                 if (validateInputsNormal(montoTotal, valorCuota)) {
-                    val prestamo = Prestamo(
-                        clienteId = selectedCliente!!.id,
-                        clienteNombre = selectedCliente!!.getNombreCompleto(),
-                        tipo = tipo,
-                        fechaInicial = selectedDate.timeInMillis,
-                        montoTotal = montoTotal!!,
-                        valorCuotaPactada = valorCuota!!,
-                        numeroCuota = 1,
-                        porcentajeInteres = 0.0, // No aplica para diarios/semanales
-                        saldoRestante = montoTotal,
-                        interesesPendientes = 0.0,
-                        ultimaFechaCalculoInteres = selectedDate.timeInMillis
-                    )
+                    val prestamo = if (isEdit && currentPrestamo != null) {
+                        // Actualizar préstamo existente
+                        currentPrestamo!!.copy(
+                            clienteId = selectedCliente!!.id,
+                            clienteNombre = selectedCliente!!.getNombreCompleto(),
+                            tipo = tipo,
+                            fechaInicial = selectedDate.timeInMillis,
+                            montoTotal = montoTotal!!,
+                            valorCuotaPactada = valorCuota!!,
+                            porcentajeInteres = 0.0
+                        )
+                    } else {
+                        // Crear nuevo préstamo
+                        Prestamo(
+                            clienteId = selectedCliente!!.id,
+                            clienteNombre = selectedCliente!!.getNombreCompleto(),
+                            tipo = tipo,
+                            fechaInicial = selectedDate.timeInMillis,
+                            montoTotal = montoTotal!!,
+                            valorCuotaPactada = valorCuota!!,
+                            numeroCuota = 1,
+                            porcentajeInteres = 0.0, // No aplica para diarios/semanales
+                            saldoRestante = montoTotal,
+                            interesesPendientes = 0.0,
+                            ultimaFechaCalculoInteres = selectedDate.timeInMillis
+                        )
+                    }
                     viewModel.createPrestamo(prestamo)
                 }
             }

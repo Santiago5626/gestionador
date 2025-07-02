@@ -19,6 +19,11 @@ class AddClienteFragment : Fragment() {
     private val binding get() = _binding!!
     
     private val viewModel: AddClienteViewModel by viewModels()
+    private val clientesViewModel: ClientesViewModel by viewModels()
+    
+    private var clienteId: String? = null
+    private var isEdit: Boolean = false
+    private var currentCliente: Cliente? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,8 +37,27 @@ class AddClienteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
+        // Obtener argumentos
+        clienteId = arguments?.getString("clienteId")
+        isEdit = arguments?.getBoolean("isEdit", false) ?: false
+        
+        setupUI()
         setupObservers()
         setupClickListeners()
+        
+        if (isEdit && clienteId != null) {
+            loadClienteData()
+        }
+    }
+    
+    private fun setupUI() {
+        // Cambiar título según el modo
+        binding.tvTitle.text = if (isEdit) "Editar Cliente" else "Agregar Cliente"
+        binding.btnGuardar.text = if (isEdit) "Actualizar" else "Guardar"
+    }
+    
+    private fun loadClienteData() {
+        clientesViewModel.loadClientes()
     }
     
     private fun setupObservers() {
@@ -55,11 +79,32 @@ class AddClienteFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.clienteCreated.collect { created ->
                 if (created) {
-                    Toast.makeText(requireContext(), "Cliente guardado exitosamente", Toast.LENGTH_SHORT).show()
+                    val message = if (isEdit) "Cliente actualizado exitosamente" else "Cliente guardado exitosamente"
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                     findNavController().navigateUp()
                 }
             }
         }
+        
+        // Observer para cargar datos del cliente en modo edición
+        if (isEdit) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                clientesViewModel.clientes.collect { clientes ->
+                    val cliente = clientes.find { it.id == clienteId }
+                    cliente?.let {
+                        currentCliente = it
+                        fillClienteData(it)
+                    }
+                }
+            }
+        }
+    }
+    
+    private fun fillClienteData(cliente: Cliente) {
+        binding.etCedula.setText(cliente.cedula)
+        binding.etNombre.setText(cliente.nombre)
+        binding.etDireccion.setText(cliente.direccion)
+        binding.etTelefono.setText(cliente.telefono)
     }
     
     private fun setupClickListeners() {
@@ -70,13 +115,24 @@ class AddClienteFragment : Fragment() {
             val telefono = binding.etTelefono.text.toString()
             
             if (validateInputs(cedula, nombre, direccion, telefono)) {
-                val cliente = Cliente(
-                    cedula = cedula,
-                    nombre = nombre,
-                    apellido = "", // Campo vacío ya que no se usa
-                    direccion = direccion,
-                    telefono = telefono
-                )
+                val cliente = if (isEdit && currentCliente != null) {
+                    // Actualizar cliente existente
+                    currentCliente!!.copy(
+                        cedula = cedula,
+                        nombre = nombre,
+                        direccion = direccion,
+                        telefono = telefono
+                    )
+                } else {
+                    // Crear nuevo cliente
+                    Cliente(
+                        cedula = cedula,
+                        nombre = nombre,
+                        apellido = "", // Campo vacío ya que no se usa
+                        direccion = direccion,
+                        telefono = telefono
+                    )
+                }
                 viewModel.createCliente(cliente)
             }
         }

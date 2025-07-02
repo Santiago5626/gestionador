@@ -19,6 +19,11 @@ class AddActivoFragment : Fragment() {
     private val binding get() = _binding!!
     
     private val viewModel: AddActivoViewModel by viewModels()
+    private val activosViewModel: ActivosViewModel by viewModels()
+    
+    private var activoId: String? = null
+    private var isEdit: Boolean = false
+    private var currentActivo: Activo? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,8 +37,27 @@ class AddActivoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
+        // Obtener argumentos
+        activoId = arguments?.getString("activoId")
+        isEdit = arguments?.getBoolean("isEdit", false) ?: false
+        
+        setupUI()
         setupObservers()
         setupClickListeners()
+        
+        if (isEdit && activoId != null) {
+            loadActivoData()
+        }
+    }
+    
+    private fun setupUI() {
+        // Cambiar título según el modo
+        binding.tvTitle.text = if (isEdit) "Editar Activo" else "Agregar Activo"
+        binding.buttonGuardar.text = if (isEdit) "Actualizar" else "Guardar"
+    }
+    
+    private fun loadActivoData() {
+        activosViewModel.loadActivos()
     }
     
     private fun setupObservers() {
@@ -55,11 +79,31 @@ class AddActivoFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.activoCreated.collect { created ->
                 if (created) {
-                    Toast.makeText(requireContext(), "Activo guardado exitosamente", Toast.LENGTH_SHORT).show()
+                    val message = if (isEdit) "Activo actualizado exitosamente" else "Activo guardado exitosamente"
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                     findNavController().navigateUp()
                 }
             }
         }
+        
+        // Observer para cargar datos del activo en modo edición
+        if (isEdit) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                activosViewModel.activos.collect { activos ->
+                    val activo = activos.find { it.id == activoId }
+                    activo?.let {
+                        currentActivo = it
+                        fillActivoData(it)
+                    }
+                }
+            }
+        }
+    }
+    
+    private fun fillActivoData(activo: Activo) {
+        binding.editTextMonto.setText(activo.monto.toString())
+        binding.editTextProcedencia.setText(activo.procedencia)
+        binding.editTextDescripcion.setText(activo.descripcion)
     }
     
     private fun setupClickListeners() {
@@ -69,11 +113,21 @@ class AddActivoFragment : Fragment() {
             val descripcion = binding.editTextDescripcion.text.toString()
             
             if (validateInputs(monto, procedencia, descripcion)) {
-                val activo = Activo(
-                    monto = monto!!,
-                    procedencia = procedencia,
-                    descripcion = descripcion
-                )
+                val activo = if (isEdit && currentActivo != null) {
+                    // Actualizar activo existente
+                    currentActivo!!.copy(
+                        monto = monto!!,
+                        procedencia = procedencia,
+                        descripcion = descripcion
+                    )
+                } else {
+                    // Crear nuevo activo
+                    Activo(
+                        monto = monto!!,
+                        procedencia = procedencia,
+                        descripcion = descripcion
+                    )
+                }
                 viewModel.createActivo(activo)
             }
         }
