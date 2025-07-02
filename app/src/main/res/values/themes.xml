@@ -35,6 +35,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextAppearance.Gestionador.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="TextAppearance.Gestionador.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:textColor">@color/textPrimary</item>
     </style>
