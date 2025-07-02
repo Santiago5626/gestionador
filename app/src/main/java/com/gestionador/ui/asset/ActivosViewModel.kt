@@ -26,15 +26,19 @@ class ActivosViewModel : ViewModel() {
     val error: StateFlow<String?> = _error.asStateFlow()
     
     // Calculate total balance based on activos
-    val totalBalance: StateFlow<Double> = _activos.combine(_activos) { activos, _ ->
-        activos.sumOf { activo ->
+    private val _totalBalance = MutableStateFlow(0.0)
+    val totalBalance: StateFlow<Double> = _totalBalance.asStateFlow()
+    
+    private fun calculateTotalBalance(activos: List<Activo>) {
+        val total = activos.sumOf { activo ->
             when (activo.categoria) {
                 CategoriaActivo.INGRESO -> activo.montoIngresado
                 CategoriaActivo.GASTO -> -activo.montoIngresado
                 CategoriaActivo.INVERSION -> activo.montoIngresado
             }
         }
-    }.asStateFlow()
+        _totalBalance.value = total
+    }
     
     fun loadActivos() {
         viewModelScope.launch {
@@ -42,6 +46,7 @@ class ActivosViewModel : ViewModel() {
             try {
                 repository.getActivos().collectLatest { activosList ->
                     _activos.value = activosList
+                    calculateTotalBalance(activosList)
                     _error.value = null
                 }
             } catch (e: Exception) {
