@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -44,9 +45,8 @@ class PrestamosFragment : Fragment() {
     private fun setupRecyclerView() {
         prestamosAdapter = PrestamosAdapter { prestamo ->
             // Navigate to prestamo detail
-            val action = PrestamosFragmentDirections
-                .actionPrestamosFragmentToPrestamoDetailFragment(prestamo.id)
-            findNavController().navigate(action)
+            val bundle = bundleOf("prestamoId" to prestamo.id)
+            findNavController().navigate(R.id.action_prestamosFragment_to_prestamoDetailFragment, bundle)
         }
         
         binding.recyclerViewPrestamos.apply {

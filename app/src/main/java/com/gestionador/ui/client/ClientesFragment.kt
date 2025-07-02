@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -44,9 +45,8 @@ class ClientesFragment : Fragment() {
     private fun setupRecyclerView() {
         clientesAdapter = ClientesAdapter { cliente ->
             // Navigate to cliente detail
-            val action = ClientesFragmentDirections
-                .actionClientesFragmentToClienteDetailFragment(cliente.id)
-            findNavController().navigate(action)
+            val bundle = bundleOf("clienteId" to cliente.id)
+            findNavController().navigate(R.id.action_clientesFragment_to_clienteDetailFragment, bundle)
         }
         
         binding.recyclerViewClientes.apply {

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import com.gestionador.databinding.FragmentClienteDetailBinding
 
 class ClienteDetailFragment : Fragment() {
@@ -13,7 +12,12 @@ class ClienteDetailFragment : Fragment() {
     private var _binding: FragmentClienteDetailBinding? = null
     private val binding get() = _binding!!
     
-    private val args: ClienteDetailFragmentArgs by navArgs()
+    private var clienteId: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        clienteId = arguments?.getString("clienteId")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,8 +31,10 @@ class ClienteDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        // TODO: Load client details using args.clienteId
-        binding.textViewClienteId.text = "Cliente ID: ${args.clienteId}"
+        // TODO: Load client details using clienteId
+        clienteId?.let { id ->
+            binding.textViewClienteId.text = "Cliente ID: $id"
+        }
     }
 
     override fun onDestroyView() {

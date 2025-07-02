@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import com.gestionador.databinding.FragmentPrestamoDetailBinding
 
 class PrestamoDetailFragment : Fragment() {
@@ -13,7 +12,12 @@ class PrestamoDetailFragment : Fragment() {
     private var _binding: FragmentPrestamoDetailBinding? = null
     private val binding get() = _binding!!
     
-    private val args: PrestamoDetailFragmentArgs by navArgs()
+    private var prestamoId: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        prestamoId = arguments?.getString("prestamoId")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,8 +31,10 @@ class PrestamoDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        // TODO: Load prestamo details using args.prestamoId
-        binding.textViewPrestamoId.text = "Préstamo ID: ${args.prestamoId}"
+        // TODO: Load prestamo details using prestamoId
+        prestamoId?.let { id ->
+            binding.textViewPrestamoId.text = "Préstamo ID: $id"
+        }
     }
 
     override fun onDestroyView() {

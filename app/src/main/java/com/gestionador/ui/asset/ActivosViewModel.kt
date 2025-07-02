@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class ActivosViewModel : ViewModel() {
@@ -38,27 +39,31 @@ class ActivosViewModel : ViewModel() {
     fun loadActivos() {
         viewModelScope.launch {
             _isLoading.value = true
-            repository.getActivos()
-                .onSuccess { activosList ->
+            try {
+                repository.getActivos().collectLatest { activosList ->
                     _activos.value = activosList
                     _error.value = null
                 }
-                .onFailure { exception ->
-                    _error.value = exception.message
-                }
-            _isLoading.value = false
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
     
     fun deleteActivo(activoId: String) {
         viewModelScope.launch {
-            repository.deleteActivo(activoId)
-                .onSuccess {
-                    loadActivos() // Reload the list
+            try {
+                repository.deleteActivo(activoId).let { result ->
+                    result.fold(
+                        onSuccess = { loadActivos() },
+                        onFailure = { e -> _error.value = e.message }
+                    )
                 }
-                .onFailure { exception ->
-                    _error.value = exception.message
-                }
+            } catch (e: Exception) {
+                _error.value = e.message
+            }
         }
     }
 }

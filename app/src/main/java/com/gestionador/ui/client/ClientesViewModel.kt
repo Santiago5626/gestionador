@@ -7,6 +7,7 @@ import com.gestionador.data.repository.FirebaseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class ClientesViewModel : ViewModel() {
@@ -25,27 +26,31 @@ class ClientesViewModel : ViewModel() {
     fun loadClientes() {
         viewModelScope.launch {
             _isLoading.value = true
-            repository.getClientes()
-                .onSuccess { clientesList ->
+            try {
+                repository.getClientes().collectLatest { clientesList ->
                     _clientes.value = clientesList
                     _error.value = null
                 }
-                .onFailure { exception ->
-                    _error.value = exception.message
-                }
-            _isLoading.value = false
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
     
     fun deleteCliente(clienteId: String) {
         viewModelScope.launch {
-            repository.deleteCliente(clienteId)
-                .onSuccess {
-                    loadClientes() // Reload the list
+            try {
+                repository.deleteCliente(clienteId).let { result ->
+                    result.fold(
+                        onSuccess = { loadClientes() },
+                        onFailure = { e -> _error.value = e.message }
+                    )
                 }
-                .onFailure { exception ->
-                    _error.value = exception.message
-                }
+            } catch (e: Exception) {
+                _error.value = e.message
+            }
         }
     }
 }
