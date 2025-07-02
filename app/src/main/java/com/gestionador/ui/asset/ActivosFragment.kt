@@ -88,7 +88,7 @@ class ActivosFragment : Fragment() {
         
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.totalBalance.collect { balance ->
-                binding.textViewBalance.text = "Balance Total: $${String.format("%.2f", balance)}"
+                binding.textViewBalance.text = "Balance Total: $${formatCurrency(balance)}"
             }
         }
         
@@ -107,10 +107,15 @@ class ActivosFragment : Fragment() {
         }
     }
     
+    private fun formatCurrency(amount: Double): String {
+        val formatter = java.text.NumberFormat.getNumberInstance(java.util.Locale("es", "CO"))
+        return formatter.format(amount.toLong())
+    }
+    
     private fun showDeleteConfirmationDialog(activo: Activo) {
         AlertDialog.Builder(requireContext())
             .setTitle("Eliminar Activo")
-            .setMessage("¿Está seguro que desea eliminar este activo por ${String.format("$%.2f", activo.monto)}?\n\nEsta acción no se puede deshacer.")
+            .setMessage("¿Está seguro que desea eliminar este activo por $${formatCurrency(activo.monto)}?\n\nEsta acción no se puede deshacer.")
             .setPositiveButton("Eliminar") { _, _ ->
                 viewModel.deleteActivo(activo.id)
                 Toast.makeText(requireContext(), "Activo eliminado", Toast.LENGTH_SHORT).show()

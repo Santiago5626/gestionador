@@ -17,7 +17,7 @@ class ActivosAdapter(
 ) : ListAdapter<Activo, ActivosAdapter.ActivoViewHolder>(ActivoDiffCallback()) {
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-    private val currencyFormat = NumberFormat.getCurrencyInstance(Locale("es", "CO"))
+    private val numberFormat = NumberFormat.getNumberInstance(Locale("es", "CO"))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivoViewHolder {
         val binding = ItemActivoBinding.inflate(
@@ -39,7 +39,7 @@ class ActivosAdapter(
         fun bind(activo: Activo, isLast: Boolean) {
             binding.apply {
                 tvFecha.text = dateFormat.format(activo.fechaCreacion)
-                tvMonto.text = "+${currencyFormat.format(activo.monto)}"
+                tvMonto.text = "+$${numberFormat.format(activo.monto.toLong())}"
                 tvDescripcion.text = activo.descripcion
                 tvProcedencia.text = "Procedencia: ${activo.procedencia}"
                 
