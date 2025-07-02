@@ -35,9 +35,15 @@ class ActivosAdapter : ListAdapter<Activo, ActivosAdapter.ActivoViewHolder>(Acti
 
         fun bind(activo: Activo, isLast: Boolean) {
             binding.apply {
-                tvFecha.text = dateFormat.format(Date(activo.fecha))
-                tvMonto.text = "+${currencyFormat.format(activo.montoIngresado)}"
-                tvDescripcion.text = activo.descripcion
+                tvFecha.text = dateFormat.format(activo.fechaCreacion)
+                tvMonto.text = "+${currencyFormat.format(activo.monto)}"
+                // Combinar procedencia y descripción en el campo descripción
+                val descripcionCompleta = if (activo.procedencia.isNotEmpty()) {
+                    "${activo.procedencia}: ${activo.descripcion}"
+                } else {
+                    activo.descripcion
+                }
+                tvDescripcion.text = descripcionCompleta
                 
                 // Ocultar la línea de tiempo en el último elemento
                 if (isLast) {
