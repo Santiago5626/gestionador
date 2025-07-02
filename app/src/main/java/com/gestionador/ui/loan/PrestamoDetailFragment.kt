@@ -105,6 +105,7 @@ class PrestamoDetailFragment : Fragment() {
                 val bundle = Bundle().apply {
                     putString("prestamoId", prestamo.id)
                 }
+                // Cambiar la acción de navegación a la acción correcta definida en nav_graph.xml
                 findNavController().navigate(R.id.action_prestamoDetailFragment_to_prestamoCartonFragment, bundle)
             }
         }
