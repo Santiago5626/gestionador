@@ -43,6 +43,11 @@
         <item name="android:textColor">@color/textSecondary</item>
     </style>
 
+    <style name="TextAppearance.Gestionador.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/textSecondary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <!-- Widget Styles -->
     <style name="Widget.Gestionador.Button" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/md_theme_primary</item>

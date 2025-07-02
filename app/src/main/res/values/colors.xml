@@ -31,6 +31,7 @@
     <color name="colorSuccess">#4CAF50</color>
     <color name="colorError">#F44336</color>
     <color name="colorInfo">#2196F3</color>
+    <color name="md_theme_error">#F44336</color>
     
     <!-- Loan Type Colors -->
     <color name="prestamoDiario">#4CAF50</color>
