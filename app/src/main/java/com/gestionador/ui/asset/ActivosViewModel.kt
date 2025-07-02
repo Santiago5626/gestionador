@@ -3,7 +3,6 @@ package com.gestionador.ui.asset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gestionador.data.models.Activo
-import com.gestionador.data.models.CategoriaActivo
 import com.gestionador.data.repository.FirebaseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,14 +28,7 @@ class ActivosViewModel : ViewModel() {
     val totalBalance: StateFlow<Double> = _totalBalance.asStateFlow()
     
     private fun calculateTotalBalance(activos: List<Activo>) {
-        val total = activos.sumOf { activo ->
-            when (activo.categoria) {
-                CategoriaActivo.INGRESOS -> activo.montoIngresado
-                CategoriaActivo.GASTOS -> -activo.montoIngresado
-                CategoriaActivo.INVERSIONES -> activo.montoIngresado
-                CategoriaActivo.OTROS -> activo.montoIngresado
-            }
-        }
+        val total = activos.sumOf { it.monto }
         _totalBalance.value = total
     }
     

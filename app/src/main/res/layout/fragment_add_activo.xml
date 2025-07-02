@@ -35,12 +35,28 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayoutProcedencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Procedencia"
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutMonto">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextProcedencia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputLayoutDescripcion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="Descripción"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutMonto">
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutProcedencia">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextDescripcion"
@@ -51,23 +67,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/textViewCategoria"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Categoría"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutDescripcion" />
-
-    <Spinner
-        android:id="@+id/spinnerCategoria"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCategoria" />
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonGuardar"
         android:layout_width="match_parent"
@@ -75,7 +74,7 @@
         android:layout_marginTop="32dp"
         android:text="Guardar"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerCategoria" />
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutDescripcion" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -88,4 +87,3 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

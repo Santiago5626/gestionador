@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.gestionador.data.models.Activo
-import com.gestionador.data.models.CategoriaActivo
 import com.gestionador.databinding.FragmentAddActivoBinding
 import kotlinx.coroutines.launch
 
@@ -34,20 +32,8 @@ class AddActivoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        setupSpinner()
         setupObservers()
         setupClickListeners()
-    }
-    
-    private fun setupSpinner() {
-        val categorias = CategoriaActivo.values().map { it.displayName }
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            categorias
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerCategoria.adapter = adapter
     }
     
     private fun setupObservers() {
@@ -79,27 +65,30 @@ class AddActivoFragment : Fragment() {
     private fun setupClickListeners() {
         binding.buttonGuardar.setOnClickListener {
             val monto = binding.editTextMonto.text.toString().toDoubleOrNull()
+            val procedencia = binding.editTextProcedencia.text.toString()
             val descripcion = binding.editTextDescripcion.text.toString()
-            val selectedIndex = binding.spinnerCategoria.selectedItemPosition
-            val categoria = CategoriaActivo.values()[selectedIndex]
             
-            if (validateInputs(monto, descripcion)) {
+            if (validateInputs(monto, procedencia, descripcion)) {
                 val activo = Activo(
-                    fecha = System.currentTimeMillis(),
-                    montoIngresado = monto!!,
-                    descripcion = descripcion,
-                    categoria = categoria
+                    monto = monto!!,
+                    procedencia = procedencia,
+                    descripcion = descripcion
                 )
                 viewModel.createActivo(activo)
             }
         }
     }
     
-    private fun validateInputs(monto: Double?, descripcion: String): Boolean {
+    private fun validateInputs(monto: Double?, procedencia: String, descripcion: String): Boolean {
         var isValid = true
         
         if (monto == null || monto <= 0) {
             binding.editTextMonto.error = "El monto debe ser mayor a 0"
+            isValid = false
+        }
+        
+        if (procedencia.isBlank()) {
+            binding.editTextProcedencia.error = "La procedencia es requerida"
             isValid = false
         }
         
