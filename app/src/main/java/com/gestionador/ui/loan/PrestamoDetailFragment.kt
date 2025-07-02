@@ -99,6 +99,15 @@ class PrestamoDetailFragment : Fragment() {
         binding.btnAbonar.setOnClickListener {
             showAbonoDialog()
         }
+
+        binding.btnVerCarton.setOnClickListener {
+            currentPrestamo?.let { prestamo ->
+                val bundle = Bundle().apply {
+                    putString("prestamoId", prestamo.id)
+                }
+                findNavController().navigate(R.id.action_prestamoDetailFragment_to_prestamoCartonFragment, bundle)
+            }
+        }
     }
     
     private fun loadPrestamoData() {
