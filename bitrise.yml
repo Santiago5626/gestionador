@@ -69,8 +69,28 @@ workflows:
             #!/usr/bin/env bash
             set -ex
             ./gradlew app:assembleDebug
+    - script@1:
+        title: Copy APK to deploy directory
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -ex
+            # Create deploy directory if it doesn't exist
+            mkdir -p $BITRISE_DEPLOY_DIR
+            
+            # Copy the generated APK to the deploy directory
+            cp app/build/outputs/apk/debug/app-debug.apk $BITRISE_DEPLOY_DIR/gestionador-debug.apk
+            
+            # List the contents to verify
+            ls -la $BITRISE_DEPLOY_DIR/
+            
+            echo "APK copied successfully to: $BITRISE_DEPLOY_DIR/gestionador-debug.apk"
     - save-gradle-cache@1: {}
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: $BITRISE_DEPLOY_DIR
+        - notify_user_groups: none
+        - is_enable_public_page: false
 
 app:
   envs:
