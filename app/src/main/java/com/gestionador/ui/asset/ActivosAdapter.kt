@@ -11,7 +11,10 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ActivosAdapter : ListAdapter<Activo, ActivosAdapter.ActivoViewHolder>(ActivoDiffCallback()) {
+class ActivosAdapter(
+    private val onEditClick: (Activo) -> Unit,
+    private val onDeleteClick: (Activo) -> Unit
+) : ListAdapter<Activo, ActivosAdapter.ActivoViewHolder>(ActivoDiffCallback()) {
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val currencyFormat = NumberFormat.getCurrencyInstance(Locale("es", "CO"))
@@ -37,17 +40,20 @@ class ActivosAdapter : ListAdapter<Activo, ActivosAdapter.ActivoViewHolder>(Acti
             binding.apply {
                 tvFecha.text = dateFormat.format(activo.fechaCreacion)
                 tvMonto.text = "+${currencyFormat.format(activo.monto)}"
-                // Combinar procedencia y descripción en el campo descripción
-                val descripcionCompleta = if (activo.procedencia.isNotEmpty()) {
-                    "${activo.procedencia}: ${activo.descripcion}"
-                } else {
-                    activo.descripcion
-                }
-                tvDescripcion.text = descripcionCompleta
+                tvDescripcion.text = activo.descripcion
+                tvProcedencia.text = "Procedencia: ${activo.procedencia}"
                 
                 // Ocultar la línea de tiempo en el último elemento
                 if (isLast) {
                     timelineLine.visibility = android.view.View.INVISIBLE
+                }
+                
+                btnEdit.setOnClickListener {
+                    onEditClick(activo)
+                }
+                
+                btnDelete.setOnClickListener {
+                    onDeleteClick(activo)
                 }
             }
         }

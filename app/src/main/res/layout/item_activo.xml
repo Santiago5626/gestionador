@@ -61,10 +61,11 @@
             android:id="@+id/tv_monto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:textAppearance="@style/TextAppearance.Gestionador.BodyLarge"
             android:textColor="@color/colorSuccess"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_edit"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="+$500.00" />
 
@@ -77,12 +78,49 @@
             android:layout_marginEnd="8dp"
             android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
             android:textColor="@color/textPrimary"
-            app:layout_constraintEnd_toStartOf="@id/tv_monto"
+            app:layout_constraintEnd_toStartOf="@id/btn_edit"
             app:layout_constraintStart_toEndOf="@id/iv_money_icon"
             app:layout_constraintTop_toBottomOf="@id/tv_fecha"
             tools:text="Pago de intereses del préstamo de Juan Pérez" />
 
+        <TextView
+            android:id="@+id/tv_procedencia"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:textAppearance="@style/TextAppearance.Gestionador.BodySmall"
+            android:textColor="@color/textSecondary"
+            app:layout_constraintEnd_toStartOf="@id/btn_edit"
+            app:layout_constraintStart_toEndOf="@id/iv_money_icon"
+            app:layout_constraintTop_toBottomOf="@id/tv_descripcion"
+            tools:text="Procedencia: Préstamo mensual" />
+
+        <!-- Botones de editar y eliminar -->
+        <ImageButton
+            android:id="@+id/btn_edit"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Editar activo"
+            android:src="@drawable/ic_edit"
+            android:tint="@color/md_theme_primary"
+            app:layout_constraintEnd_toStartOf="@id/btn_delete"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Eliminar activo"
+            android:src="@drawable/ic_delete"
+            android:tint="@color/md_theme_error"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
-

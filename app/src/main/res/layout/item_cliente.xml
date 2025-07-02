@@ -38,7 +38,7 @@
             android:textAppearance="@style/TextAppearance.Gestionador.BodyLarge"
             android:textColor="@color/textPrimary"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_edit"
             app:layout_constraintStart_toEndOf="@id/tv_avatar"
             app:layout_constraintTop_toTopOf="@id/tv_avatar"
             tools:text="Juan Pérez" />
@@ -52,7 +52,7 @@
             android:layout_marginEnd="8dp"
             android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
             android:textColor="@color/textSecondary"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_edit"
             app:layout_constraintStart_toEndOf="@id/tv_avatar"
             app:layout_constraintTop_toBottomOf="@id/tv_nombre"
             tools:text="CC: 12345678" />
@@ -66,7 +66,7 @@
             android:layout_marginEnd="8dp"
             android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
             android:textColor="@color/textSecondary"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_edit"
             app:layout_constraintStart_toEndOf="@id/tv_avatar"
             app:layout_constraintTop_toBottomOf="@id/tv_cedula"
             tools:text="📞 300 123 4567" />
@@ -80,12 +80,35 @@
             android:layout_marginEnd="8dp"
             android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
             android:textColor="@color/textSecondary"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_edit"
             app:layout_constraintStart_toEndOf="@id/tv_avatar"
             app:layout_constraintTop_toBottomOf="@id/tv_telefono"
             tools:text="📍 Calle 123 #45-67" />
 
+        <!-- Botones de editar y eliminar -->
+        <ImageButton
+            android:id="@+id/btn_edit"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Editar cliente"
+            android:src="@drawable/ic_edit"
+            android:tint="@color/md_theme_primary"
+            app:layout_constraintEnd_toStartOf="@id/btn_delete"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Eliminar cliente"
+            android:src="@drawable/ic_delete"
+            android:tint="@color/md_theme_error"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
-

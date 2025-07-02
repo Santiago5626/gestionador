@@ -9,7 +9,9 @@ import com.gestionador.data.models.Cliente
 import com.gestionador.databinding.ItemClienteBinding
 
 class ClientesAdapter(
-    private val onClienteClick: (Cliente) -> Unit
+    private val onClienteClick: (Cliente) -> Unit,
+    private val onEditClick: (Cliente) -> Unit,
+    private val onDeleteClick: (Cliente) -> Unit
 ) : ListAdapter<Cliente, ClientesAdapter.ClienteViewHolder>(ClienteDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClienteViewHolder {
@@ -37,11 +39,19 @@ class ClientesAdapter(
                 tvDireccion.text = "📍 ${cliente.direccion}"
                 
                 // Generar iniciales para el avatar
-                val iniciales = "${cliente.nombre.firstOrNull()?.uppercase() ?: ""}${cliente.apellido.firstOrNull()?.uppercase() ?: ""}"
+                val iniciales = "${cliente.nombre.firstOrNull()?.uppercase() ?: ""}"
                 tvAvatar.text = iniciales
 
                 root.setOnClickListener {
                     onClienteClick(cliente)
+                }
+                
+                btnEdit.setOnClickListener {
+                    onEditClick(cliente)
+                }
+                
+                btnDelete.setOnClickListener {
+                    onDeleteClick(cliente)
                 }
             }
         }

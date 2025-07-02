@@ -6,10 +6,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gestionador.data.models.Prestamo
+import com.gestionador.data.models.TipoPrestamo
 import com.gestionador.databinding.ItemPrestamoBinding
 
 class PrestamosAdapter(
-    private val onItemClick: (Prestamo) -> Unit
+    private val onItemClick: (Prestamo) -> Unit,
+    private val onEditClick: (Prestamo) -> Unit,
+    private val onDeleteClick: (Prestamo) -> Unit
 ) : ListAdapter<Prestamo, PrestamosAdapter.PrestamoViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrestamoViewHolder {
@@ -37,6 +40,20 @@ class PrestamosAdapter(
                     onItemClick(getItem(position))
                 }
             }
+            
+            binding.btnEdit.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onEditClick(getItem(position))
+                }
+            }
+            
+            binding.btnDelete.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onDeleteClick(getItem(position))
+                }
+            }
         }
 
         fun bind(prestamo: Prestamo) {
@@ -44,7 +61,13 @@ class PrestamosAdapter(
                 chipTipo.text = prestamo.getTipoString()
                 tvCliente.text = prestamo.clienteNombre
                 tvMonto.text = "$${String.format("%.2f", prestamo.montoTotal)}"
-                tvCuota.text = "Cuota: $${String.format("%.2f", prestamo.valorCuotaPactada)}"
+                
+                // Para préstamos mensuales, mostrar el interés en lugar de la cuota
+                if (prestamo.tipo == TipoPrestamo.MENSUAL) {
+                    tvCuota.text = "Interés: ${String.format("%.1f", prestamo.porcentajeInteres)}%"
+                } else {
+                    tvCuota.text = "Cuota: $${String.format("%.2f", prestamo.valorCuotaPactada)}"
+                }
                 
                 // Calculate progress based on payments made
                 val progress = calculateProgress(prestamo)
