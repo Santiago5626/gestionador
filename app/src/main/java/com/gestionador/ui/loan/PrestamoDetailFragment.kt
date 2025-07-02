@@ -107,8 +107,8 @@ class PrestamoDetailFragment : Fragment() {
     
     private fun loadAbonosData() {
         currentPrestamo?.let { prestamo ->
-            viewModel.viewModelScope.launch {
-                viewModel.repository.obtenerAbonos(prestamo.id).collect { abonos ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.getAbonos(prestamo.id).collect { abonos ->
                     displayAbonosData(abonos, prestamo)
                 }
             }
