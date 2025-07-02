@@ -300,23 +300,24 @@ class AddPrestamoFragment : Fragment() {
                             fechaInicial = selectedDate.timeInMillis,
                             montoTotal = montoTotal!!,
                             valorCuotaPactada = 0.0,
-                            porcentajeInteres = porcentajeInteres!!
+                            porcentajeInteres = porcentajeInteres!!,
+                            saldoRestante = montoTotal + (montoTotal * porcentajeInteres / 100) // Recalcular saldo restante al editar
                         )
                     } else {
                         // Crear nuevo préstamo
-                    Prestamo(
-                        clienteId = selectedCliente!!.id,
-                        clienteNombre = selectedCliente!!.getNombreCompleto(),
-                        tipo = tipo,
-                        fechaInicial = selectedDate.timeInMillis,
-                        montoTotal = montoTotal!!, // Capital inicial
-                        valorCuotaPactada = 0.0, // No aplica para mensuales
-                        numeroCuota = 1,
-                        porcentajeInteres = porcentajeInteres!!,
-                        saldoRestante = montoTotal + (montoTotal * porcentajeInteres / 100), // Capital + interés inicial
-                        interesesPendientes = 0.0, // Sin intereses pendientes al inicio
-                        ultimaFechaCalculoInteres = selectedDate.timeInMillis
-                    )
+                        Prestamo(
+                            clienteId = selectedCliente!!.id,
+                            clienteNombre = selectedCliente!!.getNombreCompleto(),
+                            tipo = tipo,
+                            fechaInicial = selectedDate.timeInMillis,
+                            montoTotal = montoTotal!!, // Capital inicial
+                            valorCuotaPactada = 0.0, // No aplica para mensuales
+                            numeroCuota = 1,
+                            porcentajeInteres = porcentajeInteres!!,
+                            saldoRestante = montoTotal + (montoTotal * porcentajeInteres / 100), // Capital + interés inicial
+                            interesesPendientes = 0.0, // Sin intereses pendientes al inicio
+                            ultimaFechaCalculoInteres = selectedDate.timeInMillis
+                        )
                     }
                     viewModel.createPrestamo(prestamo)
                 }

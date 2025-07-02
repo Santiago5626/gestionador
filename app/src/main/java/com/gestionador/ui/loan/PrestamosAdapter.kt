@@ -68,22 +68,25 @@ class PrestamosAdapter(
         }
 
         fun bind(prestamo: Prestamo) {
-            binding.apply {
-                chipTipo.text = prestamo.getTipoString()
-                tvCliente.text = prestamo.clienteNombre
-                tvMonto.text = "$${String.format("%.2f", prestamo.montoTotal)}"
-                
-                // Para préstamos mensuales, mostrar el interés en lugar de la cuota
-                if (prestamo.tipo == TipoPrestamo.MENSUAL) {
-                    tvCuota.text = "Interés: ${String.format("%.1f", prestamo.porcentajeInteres)}%"
-                } else {
-                    tvCuota.text = "Cuota: $${String.format("%.2f", prestamo.valorCuotaPactada)}"
+                binding.apply {
+                    chipTipo.text = prestamo.getTipoString()
+                    tvCliente.text = prestamo.clienteNombre
+                    tvMonto.text = "$${String.format("%.2f", prestamo.montoTotal)}"
+                    
+                    // Para préstamos mensuales, mostrar el interés en lugar de la cuota
+                    if (prestamo.tipo == TipoPrestamo.MENSUAL) {
+                        tvCuota.text = "Interés: ${String.format("%.1f", prestamo.porcentajeInteres)}%"
+                    } else if (prestamo.tipo == TipoPrestamo.DIARIO || prestamo.tipo == TipoPrestamo.SEMANAL) {
+                        // Para préstamos diarios y semanales, mostrar monto a prestar y monto a devolver
+                        tvCuota.text = "Monto a prestar: $${String.format("%.2f", prestamo.montoTotal)}\nMonto a devolver: $${String.format("%.2f", prestamo.valorCuotaPactada)}"
+                    } else {
+                        tvCuota.text = "Cuota: $${String.format("%.2f", prestamo.valorCuotaPactada)}"
+                    }
+                    
+                    // Calculate progress based on payments made
+                    val progress = calculateProgress(prestamo)
+                    progressBar.progress = progress
                 }
-                
-                // Calculate progress based on payments made
-                val progress = calculateProgress(prestamo)
-                progressBar.progress = progress
-            }
         }
         
         private fun calculateProgress(prestamo: Prestamo): Int {
