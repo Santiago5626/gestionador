@@ -178,13 +178,14 @@ class PrestamoDetailFragment : Fragment() {
         }
         cartonAdapter.submitList(abonos)
 
-        // Calcular saldo restante como monto total menos suma de abonos
+        // Calcular saldo restante como valor a devolver menos suma de abonos
         val sumaAbonos = abonos.sumOf { it.montoAbonado }
-        val saldoRestanteCalculado = prestamo.montoTotal - sumaAbonos
+        val valorADevolver = prestamo.montoTotal + (prestamo.montoTotal * prestamo.porcentajeInteres / 100)
+        val saldoRestanteCalculado = valorADevolver - sumaAbonos
 
         // Calcular interés como porcentaje
         val interes = if (prestamo.montoTotal != 0.0) {
-            ((prestamo.montoTotal - saldoRestanteCalculado) / prestamo.montoTotal) * 100
+            ((valorADevolver - prestamo.montoTotal) / prestamo.montoTotal) * 100
         } else {
             0.0
         }
