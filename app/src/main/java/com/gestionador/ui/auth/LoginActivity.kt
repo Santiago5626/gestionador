@@ -39,14 +39,8 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnRegister.setOnClickListener {
-            val email = binding.etEmail.text.toString().trim()
-            val password = binding.etPassword.text.toString().trim()
-
-            if (validateInput(email, password)) {
-                signUp(email, password)
-            }
-        }
+        // Botón de registro deshabilitado - solo login permitido
+        binding.btnRegister.visibility = android.view.View.GONE
 
         // Pre-llenar con tu email para facilitar el testing
         binding.etEmail.setText("angelb042512@gmail.com")
@@ -86,23 +80,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun signUp(email: String, password: String) {
-        binding.btnRegister.isEnabled = false
-        binding.progressBar.visibility = android.view.View.VISIBLE
-
-        lifecycleScope.launch {
-            authRepository.signUp(email, password)
-                .onSuccess {
-                    Toast.makeText(this@LoginActivity, "Usuario creado exitosamente!", Toast.LENGTH_SHORT).show()
-                    navigateToMain()
-                }
-                .onFailure { exception ->
-                    Toast.makeText(this@LoginActivity, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
-                    binding.btnRegister.isEnabled = true
-                    binding.progressBar.visibility = android.view.View.GONE
-                }
-        }
-    }
 
     private fun navigateToMain() {
         startActivity(Intent(this, MainActivity::class.java))

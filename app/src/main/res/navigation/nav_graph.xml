@@ -8,7 +8,7 @@
     <!-- Clientes Navigation -->
     <fragment
         android:id="@+id/clientesFragment"
-        android:name="com.company.gestion.ui.client.ClientesFragment"
+        android:name="com.gestionador.ui.client.ClientesFragment"
         android:label="@string/nav_clientes"
         tools:layout="@layout/fragment_clientes">
         <action
@@ -21,13 +21,13 @@
 
     <fragment
         android:id="@+id/addClienteFragment"
-        android:name="com.company.gestion.ui.client.AddClienteFragment"
+        android:name="com.gestionador.ui.client.AddClienteFragment"
         android:label="@string/add_cliente"
         tools:layout="@layout/fragment_add_cliente" />
 
     <fragment
         android:id="@+id/clienteDetailFragment"
-        android:name="com.company.gestion.ui.client.ClienteDetailFragment"
+        android:name="com.gestionador.ui.client.ClienteDetailFragment"
         android:label="Detalles del Cliente"
         tools:layout="@layout/fragment_cliente_detail">
         <argument
@@ -44,7 +44,7 @@
     <!-- Prestamos Navigation -->
     <fragment
         android:id="@+id/prestamosFragment"
-        android:name="com.company.gestion.ui.loan.PrestamosFragment"
+        android:name="com.gestionador.ui.loan.PrestamosFragment"
         android:label="@string/nav_prestamos"
         tools:layout="@layout/fragment_prestamos">
         <action
@@ -57,7 +57,7 @@
 
     <fragment
         android:id="@+id/addPrestamoFragment"
-        android:name="com.company.gestion.ui.loan.AddPrestamoFragment"
+        android:name="com.gestionador.ui.loan.AddPrestamoFragment"
         android:label="@string/add_prestamo"
         tools:layout="@layout/fragment_add_prestamo">
         <argument
@@ -69,7 +69,7 @@
 
     <fragment
         android:id="@+id/prestamoDetailFragment"
-        android:name="com.company.gestion.ui.loan.PrestamoDetailFragment"
+        android:name="com.gestionador.ui.loan.PrestamoDetailFragment"
         android:label="Detalles del Préstamo"
         tools:layout="@layout/fragment_prestamo_detail">
         <argument
@@ -80,7 +80,7 @@
     <!-- Activos Navigation -->
     <fragment
         android:id="@+id/activosFragment"
-        android:name="com.company.gestion.ui.asset.ActivosFragment"
+        android:name="com.gestionador.ui.asset.ActivosFragment"
         android:label="@string/nav_activos"
         tools:layout="@layout/fragment_activos">
         <action
@@ -90,7 +90,7 @@
 
     <fragment
         android:id="@+id/addActivoFragment"
-        android:name="com.company.gestion.ui.asset.AddActivoFragment"
+        android:name="com.gestionador.ui.asset.AddActivoFragment"
         android:label="@string/add_activo"
         tools:layout="@layout/fragment_add_activo" />
 

@@ -11,6 +11,13 @@ class AddPrestamoFragment : Fragment() {
 
     private var _binding: FragmentAddPrestamoBinding? = null
     private val binding get() = _binding!!
+    
+    private var clienteId: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        clienteId = arguments?.getString("clienteId")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,7 +32,9 @@ class AddPrestamoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         // TODO: Implement add prestamo functionality
-        binding.textViewTitle.text = "Agregar Nuevo Préstamo"
+        clienteId?.let { id ->
+            // Pre-fill cliente if provided
+        }
     }
 
     override fun onDestroyView() {
