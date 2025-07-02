@@ -102,4 +102,6 @@ class PrestamosViewModel : ViewModel() {
     }
     
     fun obtenerAbonos(prestamoId: String) = repository.getAbonos(prestamoId)
+
+    fun getAbonos(prestamoId: String) = repository.getAbonos(prestamoId)
 }
