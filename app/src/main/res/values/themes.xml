@@ -30,6 +30,9 @@
         <item name="materialButtonStyle">@style/Widget.Gestion.Button</item>
     </style>
     
+    <!-- Theme.Gestionador alias for compatibility -->
+    <style name="Theme.Gestionador" parent="Theme.Gestion" />
+    
     <!-- Card style -->
     <style name="Widget.Gestion.CardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardElevation">4dp</item>
