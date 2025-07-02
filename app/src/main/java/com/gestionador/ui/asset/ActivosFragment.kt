@@ -40,6 +40,12 @@ class ActivosFragment : Fragment() {
         // Load activos
         viewModel.loadActivos()
     }
+
+    override fun onResume() {
+        super.onResume()
+        // Recargar activos cuando el usuario regrese a este fragmento
+        viewModel.loadActivos()
+    }
     
     private fun setupRecyclerView() {
         activosAdapter = ActivosAdapter()

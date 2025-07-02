@@ -66,15 +66,14 @@ class AddClienteFragment : Fragment() {
         binding.btnGuardar.setOnClickListener {
             val cedula = binding.etCedula.text.toString()
             val nombre = binding.etNombre.text.toString()
-            val apellido = binding.etApellido.text.toString()
             val direccion = binding.etDireccion.text.toString()
             val telefono = binding.etTelefono.text.toString()
             
-            if (validateInputs(cedula, nombre, apellido, direccion, telefono)) {
+            if (validateInputs(cedula, nombre, direccion, telefono)) {
                 val cliente = Cliente(
                     cedula = cedula,
                     nombre = nombre,
-                    apellido = apellido,
+                    apellido = "", // Campo vacío ya que no se usa
                     direccion = direccion,
                     telefono = telefono
                 )
@@ -87,7 +86,7 @@ class AddClienteFragment : Fragment() {
         }
     }
     
-    private fun validateInputs(cedula: String, nombre: String, apellido: String, direccion: String, telefono: String): Boolean {
+    private fun validateInputs(cedula: String, nombre: String, direccion: String, telefono: String): Boolean {
         var isValid = true
         
         if (cedula.isBlank()) {
@@ -97,11 +96,6 @@ class AddClienteFragment : Fragment() {
         
         if (nombre.isBlank()) {
             binding.etNombre.error = "El nombre es requerido"
-            isValid = false
-        }
-        
-        if (apellido.isBlank()) {
-            binding.etApellido.error = "El apellido es requerido"
             isValid = false
         }
         

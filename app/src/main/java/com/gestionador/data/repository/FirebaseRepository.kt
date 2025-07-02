@@ -108,10 +108,16 @@ class FirebaseRepository {
     fun obtenerActivos(): Flow<List<Activo>> = flow {
         try {
             val snapshot = activosRef
-                .orderBy("fecha", Query.Direction.DESCENDING)
+                .orderBy("fechaCreacion", Query.Direction.DESCENDING) // Cambiado de "fecha" a "fechaCreacion"
                 .get()
                 .await()
-            val activos = snapshot.documents.mapNotNull { it.toObject(Activo::class.java) }
+            val activos = snapshot.documents.mapNotNull { 
+                try {
+                    it.toObject(Activo::class.java)?.copy(id = it.id) // Aseguramos que el ID se copie correctamente
+                } catch (e: Exception) {
+                    null
+                }
+            }
             emit(activos)
         } catch (e: Exception) {
             emit(emptyList())
