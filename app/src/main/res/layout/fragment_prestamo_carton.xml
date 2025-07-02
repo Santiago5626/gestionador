@@ -17,7 +17,6 @@
         android:elevation="2dp"
         android:padding="12dp"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="@android:color/white"
         android:clipToPadding="false"
         android:clipChildren="false"
         android:backgroundTintMode="src_over"
@@ -26,7 +25,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
-        android:background="@drawable/bg_card_rounded">
+        >
 
         <TextView
             android:id="@+id/tvClienteNombre"
