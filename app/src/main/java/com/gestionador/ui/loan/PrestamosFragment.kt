@@ -67,7 +67,9 @@ class PrestamosFragment : Fragment() {
     
     private fun setupClickListeners() {
         binding.fabAdd.setOnClickListener {
-            // Navigate to add prestamo
+            findNavController().navigate(
+                PrestamosFragmentDirections.actionPrestamosFragmentToAddPrestamoFragment()
+            )
         }
     }
 
