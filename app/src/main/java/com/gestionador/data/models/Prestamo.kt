@@ -15,7 +15,7 @@ data class Prestamo(
     val tipo: TipoPrestamo = TipoPrestamo.DIARIO,
     val fechaInicial: Long = System.currentTimeMillis(),
     val numeroCuota: Int = 1, // Autoincrementable
-    val valorCuotaPactada: Double = 0.0,
+    val valorDevolver: Double = 0.0, // Renombrado de valorCuotaPactada a valorDevolver
     val porcentajeInteres: Double = 0.0, // Solo para préstamos mensuales
     val montoTotal: Double = 0.0, // Capital inicial para préstamos mensuales
     val saldoRestante: Double = 0.0, // Capital actual (puede aumentar si no se pagan intereses)

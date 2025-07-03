@@ -76,18 +76,12 @@ class PrestamoCartonFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.obtenerAbonos(prestamoId).collect { abonos ->
+
                 if (abonos.isEmpty()) {
-                    // Crear un abono inicial con datos del préstamo para mostrar en la tabla
-                    val abonoInicial = com.gestionador.data.models.Abono(
-                        id = "inicial",
-                        prestamoId = prestamoId,
-                        numeroCuota = 1,
-                        fechaAbono = fechaInicial,
-                        montoAbonado = montoTotal,
-                        saldoRestante = montoTotal
-                    )
-                    adapter.submitList(listOf(abonoInicial))
+                    // No mostrar la tabla si no hay abonos, solo mostrar datos del préstamo
+                    binding.rvCarton.visibility = View.GONE
                 } else {
+                    binding.rvCarton.visibility = View.VISIBLE
                     adapter.submitList(abonos)
                 }
             }

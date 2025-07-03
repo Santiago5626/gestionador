@@ -32,6 +32,8 @@ class PrestamoCartonAdapter : ListAdapter<Abono, PrestamoCartonAdapter.AbonoView
                 tvFechaAbono.text = dateFormat.format(Date(abono.fechaAbono))
                 tvMontoAbonado.text = "$${String.format("%.2f", abono.montoAbonado)}"
                 tvSaldoRestante.text = "$${String.format("%.2f", abono.saldoRestante)}"
+                // Add valor a devolver display
+                tvValorDevolver.text = "$${String.format("%.2f", abono.valorDevolver)}"
             }
         }
     }

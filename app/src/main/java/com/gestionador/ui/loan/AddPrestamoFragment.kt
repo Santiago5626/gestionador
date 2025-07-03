@@ -290,75 +290,76 @@ class AddPrestamoFragment : Fragment() {
             val montoTotal = binding.etMontoTotal.text.toString().toDoubleOrNull()
             
             if (tipo == TipoPrestamo.MENSUAL) {
-                // Para préstamos mensuales
-                val porcentajeInteres = binding.etPorcentajeInteres.text.toString().toDoubleOrNull()
-                
-                if (validateInputsMensual(montoTotal, porcentajeInteres)) {
-                    val prestamo = if (isEdit && currentPrestamo != null) {
-                        // Actualizar préstamo existente
-                        currentPrestamo!!.copy(
-                            clienteId = selectedCliente!!.id,
-                            clienteNombre = selectedCliente!!.getNombreCompleto(),
-                            tipo = tipo,
-                            fechaInicial = selectedDate.timeInMillis,
-                            montoTotal = montoTotal!!,
-                            valorCuotaPactada = 0.0,
-                            porcentajeInteres = porcentajeInteres!!,
-                            saldoRestante = montoTotal + (montoTotal * porcentajeInteres / 100) // Recalcular saldo restante al editar
-                        )
-                    } else {
-                        // Crear nuevo préstamo
-                        Prestamo(
-                            clienteId = selectedCliente!!.id,
-                            clienteNombre = selectedCliente!!.getNombreCompleto(),
-                            tipo = tipo,
-                            fechaInicial = selectedDate.timeInMillis,
-                            montoTotal = montoTotal!!, // Capital inicial
-                            valorCuotaPactada = 0.0, // No aplica para mensuales
-                            numeroCuota = 1,
-                            porcentajeInteres = porcentajeInteres!!,
-                            saldoRestante = montoTotal + (montoTotal * porcentajeInteres / 100), // Capital + interés inicial
-                            interesesPendientes = 0.0, // Sin intereses pendientes al inicio
-                            ultimaFechaCalculoInteres = selectedDate.timeInMillis
-                        )
-                    }
-                    viewModel.createPrestamo(prestamo)
-                }
-            } else {
-                // Para préstamos diarios y semanales
-                val valorDevolver = binding.etValorCuota.text.toString().toDoubleOrNull()
-                
-                if (validateInputsNormal(montoTotal, valorDevolver)) {
-                    val prestamo = if (isEdit && currentPrestamo != null) {
-                        // Actualizar préstamo existente
-                        currentPrestamo!!.copy(
-                            clienteId = selectedCliente!!.id,
-                            clienteNombre = selectedCliente!!.getNombreCompleto(),
-                            tipo = tipo,
-                            fechaInicial = selectedDate.timeInMillis,
-                            montoTotal = montoTotal!!,
-                            valorCuotaPactada = valorDevolver!!,
-                            porcentajeInteres = 0.0
-                        )
-                    } else {
-                        // Crear nuevo préstamo
-                    Prestamo(
+            // Para préstamos mensuales
+            val porcentajeInteres = binding.etPorcentajeInteres.text.toString().toDoubleOrNull()
+            
+            if (validateInputsMensual(montoTotal, porcentajeInteres)) {
+                val prestamo = if (isEdit && currentPrestamo != null) {
+                    // Actualizar préstamo existente
+                    currentPrestamo!!.copy(
                         clienteId = selectedCliente!!.id,
                         clienteNombre = selectedCliente!!.getNombreCompleto(),
                         tipo = tipo,
                         fechaInicial = selectedDate.timeInMillis,
                         montoTotal = montoTotal!!,
-                        valorCuotaPactada = valorDevolver!!, // Usar valor a devolver para diarios/semanales
+                        valorDevolver = 0.0,
+                        porcentajeInteres = porcentajeInteres!!,
+                        saldoRestante = montoTotal + (montoTotal * porcentajeInteres / 100) // Recalcular saldo restante al editar
+                    )
+                } else {
+                    // Crear nuevo préstamo
+                    Prestamo(
+                        clienteId = selectedCliente!!.id,
+                        clienteNombre = selectedCliente!!.getNombreCompleto(),
+                        tipo = tipo,
+                        fechaInicial = selectedDate.timeInMillis,
+                        montoTotal = montoTotal!!, // Capital inicial
+                        valorDevolver = 0.0, // No aplica para mensuales
                         numeroCuota = 1,
-                        porcentajeInteres = 0.0, // No aplica para diarios/semanales
-                        saldoRestante = montoTotal,
-                        interesesPendientes = 0.0,
+                        porcentajeInteres = porcentajeInteres!!,
+                        saldoRestante = montoTotal + (montoTotal * porcentajeInteres / 100), // Capital + interés inicial
+                        interesesPendientes = 0.0, // Sin intereses pendientes al inicio
                         ultimaFechaCalculoInteres = selectedDate.timeInMillis
                     )
-                    }
-                    viewModel.createPrestamo(prestamo)
                 }
+                viewModel.createPrestamo(prestamo)
             }
+        } else {
+            // Para préstamos diarios y semanales
+            val valorDevolver = binding.etValorCuota.text.toString().toDoubleOrNull()
+            
+            if (validateInputsNormal(montoTotal, valorDevolver)) {
+                val prestamo = if (isEdit && currentPrestamo != null) {
+                    // Actualizar préstamo existente
+                    currentPrestamo!!.copy(
+                        clienteId = selectedCliente!!.id,
+                        clienteNombre = selectedCliente!!.getNombreCompleto(),
+                        tipo = tipo,
+                        fechaInicial = selectedDate.timeInMillis,
+                        montoTotal = montoTotal!!,
+                        valorDevolver = valorDevolver!!,
+                        porcentajeInteres = 0.0,
+                        saldoRestante = montoTotal // Ajustar saldo restante para diarios/semanales al monto total
+                    )
+                } else {
+                    // Crear nuevo préstamo
+                Prestamo(
+                    clienteId = selectedCliente!!.id,
+                    clienteNombre = selectedCliente!!.getNombreCompleto(),
+                    tipo = tipo,
+                    fechaInicial = selectedDate.timeInMillis,
+                    montoTotal = montoTotal!!,
+                    valorDevolver = valorDevolver!!, // Usar valor a devolver para diarios/semanales
+                    numeroCuota = 1,
+                    porcentajeInteres = 0.0, // No aplica para diarios/semanales
+                    saldoRestante = montoTotal, // Ajustar saldo restante para diarios/semanales al monto total
+                    interesesPendientes = 0.0,
+                    ultimaFechaCalculoInteres = selectedDate.timeInMillis
+                )
+                }
+                viewModel.createPrestamo(prestamo)
+            }
+        }
         }
         
         binding.btnCancelar.setOnClickListener {

@@ -122,7 +122,12 @@ class PrestamoDetailFragment : Fragment() {
         currentPrestamo?.let { prestamo ->
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.obtenerAbonos(prestamo.id).collect { abonos: List<Abono> ->
-                    displayAbonosData(abonos, prestamo)
+                    // Actualizar saldo restante en el préstamo con base en abonos
+                    val valorADevolver = prestamo.valorDevolver
+                    val sumaAbonos = abonos.sumOf { it.montoAbonado }
+                    val saldoRestanteCalculado = valorADevolver - sumaAbonos
+                    currentPrestamo = prestamo.copy(saldoRestante = saldoRestanteCalculado)
+                    displayAbonosData(abonos, currentPrestamo!!)
                 }
             }
         }
@@ -131,14 +136,11 @@ class PrestamoDetailFragment : Fragment() {
     private fun displayPrestamoData(prestamo: Prestamo) {
         binding.tvClienteNombre.text = prestamo.clienteNombre
         binding.tvFechaCreacion.text = "Creado el ${dateFormat.format(Date(prestamo.fechaInicial))}"
-        
-        // Formatear montos sin decimales
+
+        // Formatear monto total y cambiar label a "Monto prestado"
         val montoTotalFormatted = String.format("%,.0f", prestamo.montoTotal)
-        val saldoRestanteFormatted = String.format("%,.0f", prestamo.saldoRestante)
-        
-        binding.tvMontoTotal.text = "$$montoTotalFormatted"
-        binding.tvSaldoRestante.text = "$$saldoRestanteFormatted"
-        
+        binding.tvMontoTotal.text = "Monto prestado: $$montoTotalFormatted"
+
         // Tipo de préstamo
         val tipoText = when (prestamo.tipo) {
             TipoPrestamo.DIARIO -> "Diario"
@@ -146,58 +148,50 @@ class PrestamoDetailFragment : Fragment() {
             TipoPrestamo.MENSUAL -> "Mensual"
         }
         binding.tvTipoPrestamo.text = tipoText
-        
-        // Calcular interés y porcentaje de interés
-        val interes = prestamo.saldoRestante - prestamo.montoTotal
-        val porcentajeInteres = if (prestamo.montoTotal != 0.0) {
-            (interes / prestamo.montoTotal) * 100
-        } else {
-            0.0
-        }
-        
-        // Formatear interés y porcentaje
-        val interesFormatted = String.format("%,.0f", interes)
-        val porcentajeInteresFormatted = String.format("%.2f", porcentajeInteres)
-        
-        // Mostrar interés y porcentaje de interés
-        val interesText = if (prestamo.tipo == TipoPrestamo.MENSUAL) {
-            "$porcentajeInteresFormatted% Mensual"
-        } else {
-            "$$interesFormatted de interés"
-        }
-        binding.tvInteres.text = interesText
+
+        // Mostrar saldo restante e interés se hará en displayAbonosData para reflejar pagos
     }
-    
+
     private lateinit var cartonAdapter: PrestamoCartonAdapter
 
     private fun displayAbonosData(abonos: List<Abono>, prestamo: Prestamo) {
         if (!::cartonAdapter.isInitialized) {
             cartonAdapter = PrestamoCartonAdapter()
-            // RecyclerView id corrected to rvCarton as per layout file
             binding.rvCarton.adapter = cartonAdapter
         }
         cartonAdapter.submitList(abonos)
 
+        // Calcular valor a devolver (valorDevolver)
+        val valorADevolver = prestamo.valorDevolver
+
         // Calcular saldo restante como valor a devolver menos suma de abonos
         val sumaAbonos = abonos.sumOf { it.montoAbonado }
-        val valorADevolver = prestamo.montoTotal + (prestamo.montoTotal * prestamo.porcentajeInteres / 100)
         val saldoRestanteCalculado = valorADevolver - sumaAbonos
 
-        // Calcular interés como porcentaje
-        val interes = if (prestamo.montoTotal != 0.0) {
-            ((valorADevolver - prestamo.montoTotal) / prestamo.montoTotal) * 100
+        // Para todos los tipos, saldo restante es valor a devolver menos abonos
+        val saldoRestanteFinal = saldoRestanteCalculado
+
+        // Calcular interés como porcentaje fijo para todos los tipos, sin cambiar con abonos
+        val porcentajeInteres = if (prestamo.montoTotal != 0.0) {
+            // Aplicar fórmula: ((P - M) / M) * 100
+            ((prestamo.valorDevolver - prestamo.montoTotal) / prestamo.montoTotal) * 100
         } else {
             0.0
         }
 
-        // Actualizar la UI con los valores corregidos
-        val montoTotalFormatted = String.format("%,.0f", prestamo.montoTotal)
-        val saldoRestanteFormatted = String.format("%,.0f", saldoRestanteCalculado)
-        val interesFormatted = String.format("%.2f", interes)
+        // For monthly loans, ensure interest does not change with abonos
+        if (prestamo.tipo == TipoPrestamo.MENSUAL) {
+            // Interest is fixed and should not be recalculated based on abonos
+            // So we keep porcentajeInteres as calculated above without modification
+        }
 
-        binding.tvMontoTotal.text = "$$montoTotalFormatted"
+        // Formatear valores
+        val saldoRestanteFormatted = String.format("%,.0f", saldoRestanteFinal)
+        val interesFormatted = String.format("%.2f", porcentajeInteres)
+
+        // Actualizar UI con saldo restante e interés sin la palabra "de interés"
         binding.tvSaldoRestante.text = "$$saldoRestanteFormatted"
-        binding.tvInteres.text = "$interesFormatted% de interés"
+        binding.tvInteres.text = "$interesFormatted %"
     }
     
     private fun showDeleteConfirmationDialog() {
@@ -260,7 +254,7 @@ class PrestamoDetailFragment : Fragment() {
                     numeroCuota = prestamo.numeroCuota,
                     montoAbonado = monto,
                     saldoRestante = prestamo.saldoRestante - monto,
-                    valorCuotaPactada = prestamo.valorCuotaPactada
+                    valorCuotaPactada = prestamo.valorDevolver // Reemplazar cuota pactada por valor a devolver para diarios y semanales
                 )
                 
                 // Actualizar el préstamo
@@ -268,6 +262,9 @@ class PrestamoDetailFragment : Fragment() {
                     saldoRestante = prestamo.saldoRestante - monto,
                     numeroCuota = prestamo.numeroCuota + 1
                 )
+                
+                // Guardar el préstamo actualizado en la base de datos
+                viewModel.actualizarPrestamo(prestamoActualizado)
                 
                 viewModel.realizarAbono(abono, prestamoActualizado)
                 Toast.makeText(requireContext(), "Abono realizado exitosamente", Toast.LENGTH_SHORT).show()
