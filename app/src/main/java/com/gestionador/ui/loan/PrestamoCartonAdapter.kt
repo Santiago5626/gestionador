@@ -38,10 +38,7 @@ class PrestamoCartonAdapter : ListAdapter<Abono, PrestamoCartonAdapter.AbonoView
                     tvValorDevolver.visibility = View.VISIBLE
                 } else {
                     tvValorDevolver.visibility = View.GONE
-            }
-        }
-    }
-    }
+                }
             }
         }
     }
