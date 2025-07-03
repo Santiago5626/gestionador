@@ -48,7 +48,7 @@
                 android:id="@+id/labelMontoTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Monto Total"
+                android:text=""
                 android:textAppearance="@style/TextAppearance.Gestionador.BodyMedium"
                 android:textColor="@color/textSecondary"
                 app:layout_constraintStart_toStartOf="parent"
