@@ -16,6 +16,7 @@ import com.gestionador.data.models.Abono
 import com.gestionador.data.models.Prestamo
 import com.gestionador.data.models.TipoPrestamo
 import com.gestionador.databinding.FragmentPrestamoDetailBinding
+import com.gestionador.ui.loan.PrestamosViewModel
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
