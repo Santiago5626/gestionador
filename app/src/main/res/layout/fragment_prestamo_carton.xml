@@ -69,32 +69,6 @@
             android:textColor="#000000"
             android:layout_marginTop="2dp" />
 
-        <TextView
-            android:id="@+id/tvClienteNombre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nombre del cliente"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#000000" />
-
-        <TextView
-            android:id="@+id/tvMontoPrestado"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Monto prestado: $1,000,000"
-            android:textSize="16sp"
-            android:textColor="#000000"
-            android:layout_marginTop="4dp" />
-
-        <TextView
-            android:id="@+id/tvFechaPrestamo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fecha del préstamo: 20/06/2025"
-            android:textSize="16sp"
-            android:textColor="#000000"
-            android:layout_marginTop="2dp" />
     </LinearLayout>
 
     <!-- Tabla de abonos -->
