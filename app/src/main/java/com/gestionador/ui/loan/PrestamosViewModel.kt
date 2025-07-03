@@ -102,4 +102,19 @@ class PrestamosViewModel : ViewModel() {
     }
     
     fun obtenerAbonos(prestamoId: String) = repository.obtenerAbonos(prestamoId)
+
+    fun eliminarAbono(abonoId: String) {
+        viewModelScope.launch {
+            try {
+                repository.eliminarAbono(abonoId).let { result ->
+                    result.fold(
+                        onSuccess = { loadPrestamos() },
+                        onFailure = { e -> _error.value = e.message }
+                    )
+                }
+            } catch (e: Exception) {
+                _error.value = e.message
+            }
+        }
+    }
 }
