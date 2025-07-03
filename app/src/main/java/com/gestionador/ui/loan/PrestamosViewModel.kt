@@ -35,17 +35,20 @@ class PrestamosViewModel : ViewModel() {
                             val currentTime = System.currentTimeMillis()
                             val fiveDaysInMillis = 5 * 24 * 60 * 60 * 1000L
                             val timeSinceLastCalc = currentTime - prestamo.ultimaFechaCalculoInteres
+                            val saldoInicial = if (prestamo.saldoRestante == 0.0) prestamo.montoTotal + prestamo.interesesPendientes else prestamo.saldoRestante
                             if (timeSinceLastCalc > fiveDaysInMillis) {
                                 // Aquí se debería verificar si hay abonos suficientes, pero para simplificar asumimos que no
-                                val newInteres = prestamo.saldoRestante * prestamo.porcentajeInteres / 100
-                                val nuevoSaldo = prestamo.saldoRestante + newInteres
+                                val newInteres = saldoInicial * prestamo.porcentajeInteres / 100
+                                val nuevoSaldo = saldoInicial + newInteres
                                 prestamo.copy(
                                     saldoRestante = nuevoSaldo,
                                     interesesPendientes = prestamo.interesesPendientes + newInteres,
                                     ultimaFechaCalculoInteres = currentTime
                                 )
                             } else {
-                                prestamo
+                                prestamo.copy(
+                                    saldoRestante = saldoInicial
+                                )
                             }
                         } else {
                             prestamo

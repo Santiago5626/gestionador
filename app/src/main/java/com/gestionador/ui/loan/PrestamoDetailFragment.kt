@@ -279,6 +279,9 @@ class PrestamoDetailFragment : Fragment() {
                 // Actualizar la vista
                 displayPrestamoData(prestamoActualizado)
                 currentPrestamo = prestamoActualizado
+
+                // Reload abonos data to update saldo restante UI
+                loadAbonosData()
                 
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Error al realizar el abono: ${e.message}", Toast.LENGTH_LONG).show()
