@@ -271,8 +271,8 @@ class PrestamoDetailFragment : Fragment() {
                     prestamoId = prestamo.id,
                     numeroCuota = prestamo.numeroCuota,
                     montoAbonado = monto,
-                    saldoRestante = prestamo.saldoRestante - monto,
-                    valorCuotaPactada = prestamo.saldoRestante // Cambiado para usar saldoRestante en lugar de valorDevolver
+                    saldoRestante = prestamo.saldoRestante - monto
+                    // Se elimina valorCuotaPactada ya que se eliminará definitivamente
                 )
                 
                 // Actualizar el préstamo

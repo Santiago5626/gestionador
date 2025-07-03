@@ -13,7 +13,9 @@ data class Abono(
     val fechaAbono: Long = System.currentTimeMillis(),
     val montoAbonado: Double = 0.0,
     val saldoRestante: Double = 0.0, // Capital restante después del abono
-    val valorCuotaPactada: Double = 0.0, // Para referencia
+    // Se eliminará la variable valorCuotaPactada y se actualizarán las referencias en el código
+    // Por ahora, la dejamos comentada para referencia
+    // val valorCuotaPactada: Double = 0.0, // Para referencia
     val reditosCalculados: Double = 0.0, // Intereses calculados en este período
     val interesesPagados: Double = 0.0, // Cuánto se pagó de intereses
     val capitalPagado: Double = 0.0, // Cuánto se pagó del capital

@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gestionador.databinding.FragmentPrestamoCartonBinding
 import kotlinx.coroutines.launch
@@ -20,7 +19,6 @@ class PrestamoCartonFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: PrestamosViewModel by viewModels()
-    private val args: PrestamoCartonFragmentArgs by navArgs()
 
     private lateinit var adapter: PrestamoCartonAdapter
 
@@ -36,86 +34,47 @@ class PrestamoCartonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupHeader()
         setupRecyclerView()
         loadCartonData()
     }
 
-    private fun setupHeader() {
-        val clienteNombre = arguments?.getString("clienteNombre") ?: "N/A"
-        val montoTotal = arguments?.getDouble("montoTotal") ?: 0.0
-        val valorDevolver = arguments?.getDouble("valorDevolver") ?: montoTotal
-        val fechaInicial = arguments?.getLong("fechaInicial") ?: 0L
-
-        // Obtener el préstamo actualizado desde el ViewModel para mostrar datos correctos
-        val prestamoId = arguments?.getString("prestamoId")
-        if (prestamoId != null) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.prestamos.collect { prestamos ->
-                    val prestamo = prestamos.find { it.id == prestamoId }
-                    if (prestamo != null) {
-                        binding.tvClienteNombre.text = prestamo.clienteNombre
-                        binding.tvMontoPrestado.text = String.format("$%,.0f", prestamo.saldoRestante + prestamo.interesesPendientes)
-                        val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
-                        binding.tvFechaPrestamo.text = "Fecha del préstamo: ${sdf.format(java.util.Date(prestamo.fechaInicial))}"
-                    } else {
-                        binding.tvClienteNombre.text = clienteNombre
-                        binding.tvMontoPrestado.text = String.format("$%,.0f", valorDevolver)
-                        if (fechaInicial != 0L) {
-                            val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
-                            binding.tvFechaPrestamo.text = "Fecha del préstamo: ${sdf.format(java.util.Date(fechaInicial))}"
-                        } else {
-                            binding.tvFechaPrestamo.text = "Fecha del préstamo: N/A"
-                        }
-                    }
-                }
-            }
-        } else {
-            binding.tvClienteNombre.text = clienteNombre
-            binding.tvMontoPrestado.text = String.format("$%,.0f", valorDevolver)
-            if (fechaInicial != 0L) {
-                val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
-                binding.tvFechaPrestamo.text = "Fecha del préstamo: ${sdf.format(java.util.Date(fechaInicial))}"
-            } else {
-                binding.tvFechaPrestamo.text = "Fecha del préstamo: N/A"
-            }
-        }
+    private fun setupHeader(prestamo: com.gestionador.data.models.Prestamo) {
+        binding.tvClienteNombre.text = prestamo.clienteNombre
+        binding.tvMontoPrestado.text = String.format("$%,.0f", prestamo.montoTotal)
+        val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+        binding.tvFechaPrestamo.text = "Fecha del préstamo: ${sdf.format(java.util.Date(prestamo.fechaInicial))}"
     }
 
     private fun loadCartonData() {
         val prestamoId = arguments?.getString("prestamoId")
-        val clienteNombre = arguments?.getString("clienteNombre")
-        val montoTotal = arguments?.getDouble("montoTotal") ?: 0.0
-        val valorDevolver = arguments?.getDouble("valorDevolver") ?: montoTotal
-        val fechaInicial = arguments?.getLong("fechaInicial") ?: 0L
-
-        if (prestamoId == null || clienteNombre == null || fechaInicial == 0L) {
+        if (prestamoId == null) {
             Toast.makeText(requireContext(), "Datos de préstamo incompletos", Toast.LENGTH_SHORT).show()
             findNavController().navigateUp()
             return
         }
 
         lifecycleScope.launch {
-            viewModel.obtenerAbonos(prestamoId).collect { abonos ->
+            val prestamos = viewModel.prestamos.value
+            val prestamo = prestamos.find { it.id == prestamoId }
+            if (prestamo == null) {
+                Toast.makeText(requireContext(), "Préstamo no encontrado", Toast.LENGTH_SHORT).show()
+                findNavController().navigateUp()
+                return@launch
+            }
+            setupHeader(prestamo)
 
+            viewModel.obtenerAbonos(prestamoId).collect { abonos ->
                 if (abonos.isEmpty()) {
-                    // No mostrar la tabla si no hay abonos, solo mostrar datos del préstamo
                     binding.rvCarton.visibility = View.GONE
                 } else {
                     binding.rvCarton.visibility = View.VISIBLE
-                    // Set valorCuotaPactada for each abono to valorDevolver for display in adapter
-                    val abonosConValor = abonos.map { it.copy(valorCuotaPactada = valorDevolver) }
-                    adapter.submitList(abonosConValor)
+                    adapter.submitList(abonos)
                 }
 
-                // Calcular saldo restante y mostrar
-                val sumaAbonos = abonos.sumOf { it.montoAbonado }
-                val saldoRestante = valorDevolver - sumaAbonos
-                binding.tvSaldoRestante.text = String.format("Saldo Restante: $%,.0f", saldoRestante)
+                binding.tvSaldoRestante.text = String.format("Saldo Restante: $%,.0f", prestamo.saldoRestante)
 
-                // Calcular interés como porcentaje fijo basado en valorDevolver y montoTotal
-                val interes = if (montoTotal != 0.0) {
-                    ((valorDevolver - montoTotal) / montoTotal) * 100
+                val interes = if (prestamo.montoTotal != 0.0) {
+                    ((prestamo.valorDevolver - prestamo.montoTotal) / prestamo.montoTotal) * 100
                 } else {
                     0.0
                 }
