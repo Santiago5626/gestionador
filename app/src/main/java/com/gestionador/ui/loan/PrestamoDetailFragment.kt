@@ -52,7 +52,7 @@ class PrestamoDetailFragment : Fragment() {
         setupObservers()
         setupClickListeners()
         loadPrestamoData()
-        loadAbonosData()
+        // loadAbonosData() removed to call it after currentPrestamo is set
     }
     
     private fun setupObservers() {
@@ -62,6 +62,7 @@ class PrestamoDetailFragment : Fragment() {
                 prestamo?.let {
                     currentPrestamo = it
                     displayPrestamoData(it)
+                    loadAbonosData()  // Call loadAbonosData after currentPrestamo is set
                 }
             }
         }
@@ -259,7 +260,7 @@ class PrestamoDetailFragment : Fragment() {
                 
                 // Actualizar el préstamo
                 val prestamoActualizado = prestamo.copy(
-                    saldoRestante = prestamo.saldoRestante - monto,
+                    saldoRestante = (prestamo.saldoRestante - monto).coerceAtLeast(0.0),
                     numeroCuota = prestamo.numeroCuota + 1
                 )
                 
