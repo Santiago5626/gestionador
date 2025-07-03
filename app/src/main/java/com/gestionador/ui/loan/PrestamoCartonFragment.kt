@@ -60,6 +60,7 @@ class PrestamoCartonFragment : Fragment() {
         val prestamoId = arguments?.getString("prestamoId")
         val clienteNombre = arguments?.getString("clienteNombre")
         val montoTotal = arguments?.getDouble("montoTotal") ?: 0.0
+        val valorDevolver = arguments?.getDouble("valorDevolver") ?: montoTotal
         val fechaInicial = arguments?.getLong("fechaInicial") ?: 0L
 
         if (prestamoId == null || clienteNombre == null || fechaInicial == 0L) {
@@ -81,12 +82,10 @@ class PrestamoCartonFragment : Fragment() {
 
                 // Calcular saldo restante y mostrar
                 val sumaAbonos = abonos.sumOf { it.montoAbonado }
-                val saldoRestante = montoTotal - sumaAbonos
+                val saldoRestante = valorDevolver - sumaAbonos
                 binding.tvSaldoRestante.text = String.format("Saldo Restante: $%,.0f", saldoRestante)
 
                 // Calcular interés como porcentaje fijo basado en valorDevolver y montoTotal
-                // Para esto, necesitamos obtener valorDevolver, que no está en argumentos, así que asumimos igual a montoTotal por ahora
-                val valorDevolver = montoTotal // Esto debería venir de argumentos o ser calculado
                 val interes = if (montoTotal != 0.0) {
                     ((valorDevolver - montoTotal) / montoTotal) * 100
                 } else {
