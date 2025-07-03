@@ -138,9 +138,13 @@ class PrestamoDetailFragment : Fragment() {
         binding.tvClienteNombre.text = prestamo.clienteNombre
         binding.tvFechaCreacion.text = "Creado el ${dateFormat.format(Date(prestamo.fechaInicial))}"
 
-        // Formatear monto total y cambiar label a "Monto prestado"
+        // Formatear monto total solo con el valor, sin texto adicional
         val montoTotalFormatted = String.format("%,.0f", prestamo.montoTotal)
-        binding.tvMontoTotal.text = "Monto prestado: $$montoTotalFormatted"
+        if (prestamo.tipo == TipoPrestamo.MENSUAL) {
+            binding.tvMontoTotal.text = "$montoTotalFormatted"
+        } else {
+            binding.tvMontoTotal.text = "$$montoTotalFormatted"
+        }
 
         // Tipo de préstamo
         val tipoText = when (prestamo.tipo) {
@@ -169,8 +173,12 @@ class PrestamoDetailFragment : Fragment() {
         val sumaAbonos = abonos.sumOf { it.montoAbonado }
         val saldoRestanteCalculado = valorADevolver - sumaAbonos
 
-        // Para todos los tipos, saldo restante es valor a devolver menos abonos
-        val saldoRestanteFinal = saldoRestanteCalculado
+        // Para préstamos mensuales, usar saldoRestante calculado en el préstamo (que puede incluir intereses)
+        val saldoRestanteFinal = if (prestamo.tipo == TipoPrestamo.MENSUAL) {
+            prestamo.saldoRestante
+        } else {
+            saldoRestanteCalculado
+        }
 
         // Calcular interés como porcentaje fijo para todos los tipos, sin cambiar con abonos
         val porcentajeInteres = if (prestamo.montoTotal != 0.0) {
