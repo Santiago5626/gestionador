@@ -47,13 +47,38 @@ class PrestamoCartonFragment : Fragment() {
         val valorDevolver = arguments?.getDouble("valorDevolver") ?: montoTotal
         val fechaInicial = arguments?.getLong("fechaInicial") ?: 0L
 
-        binding.tvClienteNombre.text = clienteNombre
-        binding.tvMontoPrestado.text = String.format("$%,.0f", valorDevolver)
-        if (fechaInicial != 0L) {
-            val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
-            binding.tvFechaPrestamo.text = "Fecha del préstamo: ${sdf.format(java.util.Date(fechaInicial))}"
+        // Obtener el préstamo actualizado desde el ViewModel para mostrar datos correctos
+        val prestamoId = arguments?.getString("prestamoId")
+        if (prestamoId != null) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.prestamos.collect { prestamos ->
+                    val prestamo = prestamos.find { it.id == prestamoId }
+                    if (prestamo != null) {
+                        binding.tvClienteNombre.text = prestamo.clienteNombre
+                        binding.tvMontoPrestado.text = String.format("$%,.0f", prestamo.saldoRestante + prestamo.interesesPendientes)
+                        val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+                        binding.tvFechaPrestamo.text = "Fecha del préstamo: ${sdf.format(java.util.Date(prestamo.fechaInicial))}"
+                    } else {
+                        binding.tvClienteNombre.text = clienteNombre
+                        binding.tvMontoPrestado.text = String.format("$%,.0f", valorDevolver)
+                        if (fechaInicial != 0L) {
+                            val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+                            binding.tvFechaPrestamo.text = "Fecha del préstamo: ${sdf.format(java.util.Date(fechaInicial))}"
+                        } else {
+                            binding.tvFechaPrestamo.text = "Fecha del préstamo: N/A"
+                        }
+                    }
+                }
+            }
         } else {
-            binding.tvFechaPrestamo.text = "Fecha del préstamo: N/A"
+            binding.tvClienteNombre.text = clienteNombre
+            binding.tvMontoPrestado.text = String.format("$%,.0f", valorDevolver)
+            if (fechaInicial != 0L) {
+                val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+                binding.tvFechaPrestamo.text = "Fecha del préstamo: ${sdf.format(java.util.Date(fechaInicial))}"
+            } else {
+                binding.tvFechaPrestamo.text = "Fecha del préstamo: N/A"
+            }
         }
     }
 

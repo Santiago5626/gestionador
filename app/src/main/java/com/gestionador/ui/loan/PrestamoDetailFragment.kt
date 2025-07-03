@@ -272,7 +272,7 @@ class PrestamoDetailFragment : Fragment() {
                     numeroCuota = prestamo.numeroCuota,
                     montoAbonado = monto,
                     saldoRestante = prestamo.saldoRestante - monto,
-                    valorCuotaPactada = prestamo.valorDevolver // Reemplazar cuota pactada por valor a devolver para diarios y semanales
+                    valorCuotaPactada = prestamo.saldoRestante // Cambiado para usar saldoRestante en lugar de valorDevolver
                 )
                 
                 // Actualizar el préstamo
