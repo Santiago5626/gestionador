@@ -125,10 +125,17 @@ class PrestamoDetailFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.obtenerAbonos(prestamo.id).collect { abonos: List<Abono> ->
                     // Actualizar saldo restante en el préstamo con base en abonos
-                    val valorADevolver = prestamo.valorDevolver
+                    val valorADevolver = if (prestamo.tipo == TipoPrestamo.MENSUAL) {
+                        prestamo.saldoRestante + prestamo.interesesPendientes
+                    } else {
+                        prestamo.valorDevolver
+                    }
                     val sumaAbonos = abonos.sumOf { it.montoAbonado }
                     val saldoRestanteCalculado = valorADevolver - sumaAbonos
-                    currentPrestamo = prestamo.copy(saldoRestante = saldoRestanteCalculado)
+                    currentPrestamo = prestamo.copy(
+                        saldoRestante = saldoRestanteCalculado,
+                        valorDevolver = saldoRestanteCalculado // Actualizar valorDevolver para que refleje el saldo restante
+                    )
                     displayAbonosData(abonos, currentPrestamo!!)
                 }
             }
