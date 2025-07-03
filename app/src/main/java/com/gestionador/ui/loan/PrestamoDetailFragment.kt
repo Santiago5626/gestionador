@@ -264,7 +264,8 @@ class PrestamoDetailFragment : Fragment() {
                 )
                 
                 // Guardar el préstamo actualizado en la base de datos
-                viewModel.actualizarPrestamo(prestamoActualizado)
+                // Removed call to actualizarPrestamo as it does not exist
+                // viewModel.actualizarPrestamo(prestamoActualizado)
                 
                 viewModel.realizarAbono(abono, prestamoActualizado)
                 Toast.makeText(requireContext(), "Abono realizado exitosamente", Toast.LENGTH_SHORT).show()

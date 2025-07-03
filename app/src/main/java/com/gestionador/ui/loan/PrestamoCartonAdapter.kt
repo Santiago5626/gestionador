@@ -29,16 +29,19 @@ class PrestamoCartonAdapter : ListAdapter<Abono, PrestamoCartonAdapter.AbonoView
 
         fun bind(abono: Abono) {
             binding.apply {
-                tvFecha.text = dateFormat.format(Date(abono.fechaAbono))
-                tvAbono.text = "$${String.format("%,.2f", abono.montoAbonado)}"
-                tvRestante.text = "$${String.format("%,.2f", abono.saldoRestante)}"
+                tvFechaAbono.text = dateFormat.format(Date(abono.fechaAbono))
+                tvMontoAbonado.text = "$${String.format("%,.2f", abono.montoAbonado)}"
+                tvSaldoRestante.text = "$${String.format("%,.2f", abono.saldoRestante)}"
                 // Show valorDevolver if available, else hide or omit
                 if (abono.valorDevolver != null) {
                     tvValorDevolver.text = "$${String.format("%,.2f", abono.valorDevolver)}"
                     tvValorDevolver.visibility = View.VISIBLE
                 } else {
                     tvValorDevolver.visibility = View.GONE
-                }
+            }
+        }
+    }
+    }
             }
         }
     }
