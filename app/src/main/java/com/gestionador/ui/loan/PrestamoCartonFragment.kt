@@ -47,12 +47,53 @@ class PrestamoCartonFragment : Fragment() {
         val fechaInicial = arguments?.getLong("fechaInicial") ?: 0L
 
         binding.tvClienteNombre.text = clienteNombre
-        binding.tvMontoPrestado.text = "Monto prestado: $${String.format("%,.0f", montoTotal)}"
+        binding.tvMontoPrestado.text = String.format("$%,.0f", montoTotal)
         if (fechaInicial != 0L) {
             val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
             binding.tvFechaPrestamo.text = "Fecha del préstamo: ${sdf.format(java.util.Date(fechaInicial))}"
         } else {
             binding.tvFechaPrestamo.text = "Fecha del préstamo: N/A"
+        }
+    }
+
+    private fun loadCartonData() {
+        val prestamoId = arguments?.getString("prestamoId")
+        val clienteNombre = arguments?.getString("clienteNombre")
+        val montoTotal = arguments?.getDouble("montoTotal") ?: 0.0
+        val fechaInicial = arguments?.getLong("fechaInicial") ?: 0L
+
+        if (prestamoId == null || clienteNombre == null || fechaInicial == 0L) {
+            Toast.makeText(requireContext(), "Datos de préstamo incompletos", Toast.LENGTH_SHORT).show()
+            findNavController().navigateUp()
+            return
+        }
+
+        lifecycleScope.launch {
+            viewModel.obtenerAbonos(prestamoId).collect { abonos ->
+
+                if (abonos.isEmpty()) {
+                    // No mostrar la tabla si no hay abonos, solo mostrar datos del préstamo
+                    binding.rvCarton.visibility = View.GONE
+                } else {
+                    binding.rvCarton.visibility = View.VISIBLE
+                    adapter.submitList(abonos)
+                }
+
+                // Calcular saldo restante y mostrar
+                val sumaAbonos = abonos.sumOf { it.montoAbonado }
+                val saldoRestante = montoTotal - sumaAbonos
+                binding.tvSaldoRestante.text = String.format("Saldo Restante: $%,.0f", saldoRestante)
+
+                // Calcular interés como porcentaje fijo basado en valorDevolver y montoTotal
+                // Para esto, necesitamos obtener valorDevolver, que no está en argumentos, así que asumimos igual a montoTotal por ahora
+                val valorDevolver = montoTotal // Esto debería venir de argumentos o ser calculado
+                val interes = if (montoTotal != 0.0) {
+                    ((valorDevolver - montoTotal) / montoTotal) * 100
+                } else {
+                    0.0
+                }
+                binding.tvInteres.text = String.format("Interés: %.2f%%", interes)
+            }
         }
     }
 
