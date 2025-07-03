@@ -33,7 +33,7 @@ class PrestamoCartonAdapter : ListAdapter<Abono, PrestamoCartonAdapter.AbonoView
                 tvAbono.text = "$${String.format("%,.2f", abono.montoAbonado)}"
                 tvRestante.text = "$${String.format("%,.2f", abono.saldoRestante)}"
                 // Show valorDevolver if available, else hide or omit
-                if (abono.valorDevolver != 0.0) {
+                if (abono.valorDevolver != null) {
                     tvValorDevolver.text = "$${String.format("%,.2f", abono.valorDevolver)}"
                     tvValorDevolver.visibility = View.VISIBLE
                 } else {
