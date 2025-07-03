@@ -166,19 +166,8 @@ class PrestamoDetailFragment : Fragment() {
         }
         cartonAdapter.submitList(abonos)
 
-        // Calcular valor a devolver (valorDevolver)
-        val valorADevolver = prestamo.valorDevolver
-
-        // Calcular saldo restante como valor a devolver menos suma de abonos
-        val sumaAbonos = abonos.sumOf { it.montoAbonado }
-        val saldoRestanteCalculado = valorADevolver - sumaAbonos
-
-        // Para préstamos mensuales, usar saldoRestante calculado en el préstamo (que puede incluir intereses)
-        val saldoRestanteFinal = if (prestamo.tipo == TipoPrestamo.MENSUAL) {
-            prestamo.saldoRestante
-        } else {
-            saldoRestanteCalculado
-        }
+        // Always use prestamo.saldoRestante for saldo restante display
+        val saldoRestanteFinal = prestamo.saldoRestante
 
         // Calcular interés como porcentaje fijo para todos los tipos, sin cambiar con abonos
         val porcentajeInteres = if (prestamo.montoTotal != 0.0) {
@@ -246,11 +235,18 @@ class PrestamoDetailFragment : Fragment() {
     private fun deletePrestamo(prestamoId: String) {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
+                // Primero eliminar los abonos relacionados al préstamo
+                viewModel.obtenerAbonos(prestamoId).collect { abonos ->
+                    abonos.forEach { abono ->
+                        viewModel.eliminarAbono(abono.id)
+                    }
+                }
+                // Luego eliminar el préstamo
                 viewModel.deletePrestamo(prestamoId)
-                Toast.makeText(requireContext(), "Préstamo eliminado exitosamente", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Préstamo y abonos eliminados exitosamente", Toast.LENGTH_SHORT).show()
                 findNavController().navigateUp()
             } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Error al eliminar el préstamo: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Error al eliminar el préstamo y abonos: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
     }

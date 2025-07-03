@@ -44,10 +44,11 @@ class PrestamoCartonFragment : Fragment() {
     private fun setupHeader() {
         val clienteNombre = arguments?.getString("clienteNombre") ?: "N/A"
         val montoTotal = arguments?.getDouble("montoTotal") ?: 0.0
+        val valorDevolver = arguments?.getDouble("valorDevolver") ?: montoTotal
         val fechaInicial = arguments?.getLong("fechaInicial") ?: 0L
 
         binding.tvClienteNombre.text = clienteNombre
-        binding.tvMontoPrestado.text = String.format("$%,.0f", montoTotal)
+        binding.tvMontoPrestado.text = String.format("$%,.0f", valorDevolver)
         if (fechaInicial != 0L) {
             val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
             binding.tvFechaPrestamo.text = "Fecha del préstamo: ${sdf.format(java.util.Date(fechaInicial))}"
@@ -77,7 +78,9 @@ class PrestamoCartonFragment : Fragment() {
                     binding.rvCarton.visibility = View.GONE
                 } else {
                     binding.rvCarton.visibility = View.VISIBLE
-                    adapter.submitList(abonos)
+                    // Set valorCuotaPactada for each abono to valorDevolver for display in adapter
+                    val abonosConValor = abonos.map { it.copy(valorCuotaPactada = valorDevolver) }
+                    adapter.submitList(abonosConValor)
                 }
 
                 // Calcular saldo restante y mostrar

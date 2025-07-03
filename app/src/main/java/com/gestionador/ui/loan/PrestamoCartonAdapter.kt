@@ -29,6 +29,7 @@ class PrestamoCartonAdapter : ListAdapter<Abono, PrestamoCartonAdapter.AbonoView
 
         fun bind(abono: Abono) {
             binding.apply {
+                tvNumeroCuota.text = (adapterPosition + 1).toString()
                 tvFechaAbono.text = dateFormat.format(Date(abono.fechaAbono))
                 tvMontoAbonado.text = "$${String.format("%,.2f", abono.montoAbonado)}"
                 tvSaldoRestante.text = "$${String.format("%,.2f", abono.saldoRestante)}"
