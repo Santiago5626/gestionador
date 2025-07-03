@@ -30,6 +30,16 @@ class FirebaseRepository {
         }
     }
 
+    // New function to delete an Abono by id
+    suspend fun eliminarAbono(abonoId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            abonosRef.document(abonoId).delete().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     fun obtenerClientes(): Flow<List<Cliente>> = flow {
         try {
             val snapshot = clientesRef.orderBy("nombre").get().await()
