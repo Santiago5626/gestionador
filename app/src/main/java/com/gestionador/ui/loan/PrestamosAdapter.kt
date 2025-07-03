@@ -78,9 +78,9 @@ class PrestamosAdapter(
                         tvCuota.text = "Interés: ${String.format("%.1f", prestamo.porcentajeInteres)}%"
                     } else if (prestamo.tipo == TipoPrestamo.DIARIO || prestamo.tipo == TipoPrestamo.SEMANAL) {
                         // Para préstamos diarios y semanales, mostrar monto a prestar y monto a devolver
-                        tvCuota.text = "Monto a prestar: $${String.format("%.2f", prestamo.montoTotal)}\nMonto a devolver: $${String.format("%.2f", prestamo.valorCuotaPactada)}"
+                        tvCuota.text = "Monto a prestar: $${String.format("%.2f", prestamo.montoTotal)}\nMonto a devolver: $${String.format("%.2f", prestamo.valorDevolver)}"
                     } else {
-                        tvCuota.text = "Cuota: $${String.format("%.2f", prestamo.valorCuotaPactada)}"
+                        tvCuota.text = "Cuota: $${String.format("%.2f", prestamo.valorDevolver)}"
                     }
                     
                     // Calculate progress based on payments made

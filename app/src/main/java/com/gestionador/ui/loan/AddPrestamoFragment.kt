@@ -240,7 +240,7 @@ class AddPrestamoFragment : Fragment() {
         if (prestamo.tipo == TipoPrestamo.MENSUAL) {
             binding.etPorcentajeInteres.setText(prestamo.porcentajeInteres.toString())
         } else {
-            binding.etValorCuota.setText(prestamo.valorCuotaPactada.toString())
+            binding.etValorCuota.setText(prestamo.valorDevolver.toString())
         }
         
         // Seleccionar cliente
