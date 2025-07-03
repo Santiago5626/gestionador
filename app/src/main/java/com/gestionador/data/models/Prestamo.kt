@@ -128,7 +128,7 @@ data class Prestamo(
                 val prestamosActualizado = actualizarInteresesSiCorresponde()
                 prestamosActualizado.interesesPendientes + prestamosActualizado.calcularInteresesMensuales()
             }
-            else -> valorCuotaPactada
+            else -> valorDevolver
         }
     }
 
