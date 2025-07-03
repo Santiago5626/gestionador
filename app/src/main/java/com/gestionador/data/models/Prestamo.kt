@@ -162,7 +162,7 @@ data class Prestamo(
             datos["Saldo Total (Capital + Intereses)"] = getSaldoTotal()
             datos["Pago Mínimo (Solo Intereses)"] = getMontoMinimoPago()
         } else {
-            datos["Valor Cuota Pactada"] = valorCuotaPactada
+            datos["Valor a Devolver"] = valorDevolver
         }
 
         return datos
