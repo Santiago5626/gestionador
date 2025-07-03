@@ -102,32 +102,6 @@ class PrestamoCartonFragment : Fragment() {
         binding.rvCarton.adapter = adapter
     }
 
-    private fun loadCartonData() {
-        val prestamoId = arguments?.getString("prestamoId")
-        val clienteNombre = arguments?.getString("clienteNombre")
-        val montoTotal = arguments?.getDouble("montoTotal") ?: 0.0
-        val fechaInicial = arguments?.getLong("fechaInicial") ?: 0L
-
-        if (prestamoId == null || clienteNombre == null || fechaInicial == 0L) {
-            Toast.makeText(requireContext(), "Datos de préstamo incompletos", Toast.LENGTH_SHORT).show()
-            findNavController().navigateUp()
-            return
-        }
-
-        lifecycleScope.launch {
-            viewModel.obtenerAbonos(prestamoId).collect { abonos ->
-
-                if (abonos.isEmpty()) {
-                    // No mostrar la tabla si no hay abonos, solo mostrar datos del préstamo
-                    binding.rvCarton.visibility = View.GONE
-                } else {
-                    binding.rvCarton.visibility = View.VISIBLE
-                    adapter.submitList(abonos)
-                }
-            }
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
