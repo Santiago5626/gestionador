@@ -1,6 +1,7 @@
 package com.gestionador.ui.loan
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,8 +13,6 @@ import java.util.*
 
 class PrestamoCartonAdapter : ListAdapter<Abono, PrestamoCartonAdapter.AbonoViewHolder>(DiffCallback) {
 
-    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AbonoViewHolder {
         val binding = ItemCartonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AbonoViewHolder(binding)
@@ -21,19 +20,25 @@ class PrestamoCartonAdapter : ListAdapter<Abono, PrestamoCartonAdapter.AbonoView
 
     override fun onBindViewHolder(holder: AbonoViewHolder, position: Int) {
         val abono = getItem(position)
-        holder.bind(abono, position + 1)
+        holder.bind(abono)
     }
 
     inner class AbonoViewHolder(private val binding: ItemCartonBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(abono: Abono, numeroCuota: Int) {
+
+        private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+        fun bind(abono: Abono) {
             binding.apply {
-                tvNumeroCuota.text = numeroCuota.toString()
-                // Remove tvFechaInicial as it does not exist in layout
-                tvFechaAbono.text = dateFormat.format(Date(abono.fechaAbono))
-                tvMontoAbonado.text = "$${String.format("%.2f", abono.montoAbonado)}"
-                tvSaldoRestante.text = "$${String.format("%.2f", abono.saldoRestante)}"
-                // Add valor a devolver display
-                tvValorDevolver.text = "$${String.format("%.2f", abono.valorDevolver)}"
+                tvFecha.text = dateFormat.format(Date(abono.fechaAbono))
+                tvAbono.text = "$${String.format("%,.2f", abono.montoAbonado)}"
+                tvRestante.text = "$${String.format("%,.2f", abono.saldoRestante)}"
+                // Show valorDevolver if available, else hide or omit
+                if (abono.valorDevolver != 0.0) {
+                    tvValorDevolver.text = "$${String.format("%,.2f", abono.valorDevolver)}"
+                    tvValorDevolver.visibility = View.VISIBLE
+                } else {
+                    tvValorDevolver.visibility = View.GONE
+                }
             }
         }
     }
