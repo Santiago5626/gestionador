@@ -155,7 +155,12 @@ class PrestamoDetailFragment : Fragment() {
         }
         binding.tvTipoPrestamo.text = tipoText
 
-        // Mostrar saldo restante e interés se hará en displayAbonosData para reflejar pagos
+        // Mostrar saldo restante e interés también aquí para reflejar pagos
+        val saldoRestanteFormatted = String.format("%,.0f", prestamo.saldoRestante)
+        binding.tvSaldoRestante.text = "$$saldoRestanteFormatted"
+
+        val interesFormatted = String.format("%.2f", prestamo.interesesPendientes)
+        binding.tvInteres.text = "$interesFormatted %"
     }
 
     private lateinit var cartonAdapter: PrestamoCartonAdapter
